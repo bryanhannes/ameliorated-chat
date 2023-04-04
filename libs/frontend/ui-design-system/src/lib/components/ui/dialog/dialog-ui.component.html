@@ -1,0 +1,11 @@
+<ng-template cdkPortal>
+  <div class="sidebar">
+    <div class="sidebar__header">
+      <ng-content select="[ac-sidebar-header]"></ng-content>
+      <button (click)="closeSidebar.emit()">Close</button>
+    </div>
+    <div class="sidebar__body">
+      <ng-content select="[ac-sidebar-body]"></ng-content>
+    </div>
+  </div>
+</ng-template>

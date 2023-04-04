@@ -1,0 +1,14 @@
+<div class="sidebar">
+  <div class="sidebar__close">
+    <button (click)="closeSidebar.emit()">x</button>
+  </div>
+  <div class="sidebar__content">
+    <div class="sidebar__header">
+      <ng-content select="[ac-sidebar-header]"></ng-content>
+
+    </div>
+    <div class="sidebar__body">
+      <ng-content select="[ac-sidebar-body]"></ng-content>
+    </div>
+  </div>
+</div>

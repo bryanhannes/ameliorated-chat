@@ -1,0 +1,42 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
+
+.page {
+  display: flex;
+  flex-direction: row;
+
+  &__sidebar {
+    translate: -350px;
+    width: 300px;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    transition: all 0.3s ease-in-out;
+    z-index: 10;
+
+    &-open {
+      translate: 0;
+    }
+
+    @media screen and (min-width: $breakpoint-md) {
+      translate: -300px;
+      width: 300px;
+
+      &-open {
+        translate: 0;
+      }
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    transition: all 0.3s ease-in-out;
+
+    @media (min-width: $breakpoint-md) {
+      &-open {
+        padding-left: 300px;
+      }
+    }
+  }
+}

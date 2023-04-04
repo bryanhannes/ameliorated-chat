@@ -1,0 +1,48 @@
+@import '../../../styling/colors';
+@import '../../../styling/breakpoints';
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: $gray-50;
+  height: 100vh;
+  z-index: 11;
+  box-shadow: 0 0.125rem 0.25rem $gray-400;
+
+
+  &__header {
+
+  }
+
+  &__body {
+
+  }
+
+  &__close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    cursor: pointer;
+    margin-right: -3rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (min-width: $breakpoint-md) {
+      display: none;
+    }
+
+  }
+
+  &__content {
+    width: calc(300px + 3rem);
+
+    @media screen and (min-width: $breakpoint-md) {
+      width: 300px;
+    }
+  }
+}

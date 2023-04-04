@@ -49,13 +49,13 @@
       "skipTests": true,
       "standalone": true,
       "routing": true,
-      "prefix": "sh"
+      "prefix": "ac"
     },
     "@nrwl/angular:library": {
       "linter": "eslint",
       "unitTestRunner": "jest",
       "style": "scss",
-      "prefix": "sh",
+      "prefix": "ac",
       "skipModule": true,
       "skipTests": true,
       "standalone": true
@@ -68,5 +68,6 @@
     "@nrwl/angular:service": {
       "skipTests": true
     }
-  }
+  },
+  "defaultProject": "chat"
 }

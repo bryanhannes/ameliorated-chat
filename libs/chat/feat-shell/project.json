@@ -2,13 +2,18 @@
   "name": "chat-feat-shell",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/chat/feat-shell/src",
-  "prefix": "sh",
-  "tags": ["shope:chat", "type=feat"],
+  "prefix": "ac",
+  "tags": [
+    "scope:chat",
+    "type:feat"
+  ],
   "projectType": "library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "libs/chat/feat-shell/jest.config.ts",
         "passWithNoTests": true
@@ -22,7 +27,9 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
         "lintFilePatterns": [
           "libs/chat/feat-shell/**/*.ts",

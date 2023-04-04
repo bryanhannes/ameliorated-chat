@@ -1,1 +1,20 @@
-<p>chat-feat-shell works!</p>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="page">
+    <div class="page__sidebar" [ngClass]="{ 'page__sidebar-open': vm.sidebarOpen }">
+      <ac-sidebar (closeSidebar)="closeHamburgerMenu()">
+        <ng-container ac-sidebar-header>Hello</ng-container>
+        <ng-container ac-sidebar-body>This is my body</ng-container>
+      </ac-sidebar>
+    </div>
+
+    <div class="page__body" [ngClass]="{ 'page__body-open': vm.sidebarOpen }">
+      <ac-header (openHamburgerMenu)="openHamburgerMenu()" (openSettingsMenu)="openSettingsMenu()">
+        New Chat
+      </ac-header>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+</ng-container>
+

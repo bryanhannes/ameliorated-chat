@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ameliorated-chat/chat/data-access-chat-state": [
+        "libs/chat/data-access-chat-state/src/index.ts"
+      ],
       "@ameliorated-chat/chat/feat-chat": ["libs/chat/feat-chat/src/index.ts"],
       "@ameliorated-chat/chat/feat-shell": [
         "libs/chat/feat-shell/src/index.ts"
