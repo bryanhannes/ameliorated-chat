@@ -1,6 +1,6 @@
-import { Route } from '@angular/router'
-import { ChatFeatShellComponent } from './chat-feat-shell/chat-feat-shell.component'
-import { ChatSmartComponent } from '@ameliorated-chat/chat/feat-chat'
+import { Route } from '@angular/router';
+import { ChatFeatShellComponent } from './chat-feat-shell/chat-feat-shell.component';
+import { ChatSmartComponent } from '@ameliorated-chat/chat/feat-chat';
 
 export const chatFeatShellRoutes: Route[] = [
   {
@@ -8,9 +8,9 @@ export const chatFeatShellRoutes: Route[] = [
     component: ChatFeatShellComponent,
     children: [
       {
-        path: '',
+        path: ':id',
         component: ChatSmartComponent
       }
     ]
   }
-]
+];

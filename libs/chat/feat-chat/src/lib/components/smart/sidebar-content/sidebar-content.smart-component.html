@@ -1,0 +1,11 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="toolbox">
+    <button (click)="newChat()" class="button__new-chat">💬 New Chat</button>
+    <div class="toolbox__search">
+      <input type="text" placeholder="Search chats" class="toolbox__search__input" [ngModel]="vm.searchText"
+             (ngModelChange)="searchTextChanged($event)">
+    </div>
+  </div>
+
+  <ac-chat-list [chats]="vm.filteredChats" [currentChatId]="vm.currentChatId"></ac-chat-list>
+</ng-container>

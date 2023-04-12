@@ -1,0 +1,3 @@
+<a [routerLink]="[chat.id]" class="chats__item" *ngFor="let chat of chats"
+   [ngClass]="{'chats__item--active': chat.id === currentChatId}"
+>{{chat.title}}</a>

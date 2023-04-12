@@ -22,11 +22,15 @@
       "@ameliorated-chat/chat/feat-shell": [
         "libs/chat/feat-shell/src/index.ts"
       ],
+      "@ameliorated-chat/chat/type-chat": ["libs/chat/type-chat/src/index.ts"],
       "@ameliorated-chat/frontend/ui-design-system": [
         "libs/frontend/ui-design-system/src/index.ts"
       ],
       "@ameliorated-chat/frontend/util-state": [
         "libs/frontend/util-state/src/index.ts"
+      ],
+      "@ameliorated-chat/frontend/util-uuid": [
+        "libs/frontend/util-uuid/src/index.ts"
       ]
     }
   },

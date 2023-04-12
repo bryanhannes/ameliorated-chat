@@ -16,6 +16,7 @@
 
     &-open {
       translate: 0;
+      z-index: 40;
     }
 
     @media screen and (min-width: $breakpoint-md) {
