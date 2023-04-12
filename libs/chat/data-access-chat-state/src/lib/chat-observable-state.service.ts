@@ -3,11 +3,11 @@ import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { Chat } from '@ameliorated-chat/chat/type-chat';
 
 export type ChatState = {
-  currentChatId: string;
   sidebarOpen: boolean;
   openApiKey: string;
   chats: Chat[];
   useEnterToSend: boolean; // Still need to implement this;
+  userProfilePicUrl: string;
 };
 
 const mockChats: Chat[] = [
@@ -24,7 +24,7 @@ const mockChats: Chat[] = [
       },
       {
         message: '1 + 1 equals 2',
-        role: 'system'
+        role: 'assistant'
       }
     ],
     model: 'gpt-3.5-turbo',
@@ -45,7 +45,7 @@ const mockChats: Chat[] = [
       {
         message:
           'Apple, Banana, Orange, Pineapple, Mango, Watermelon, Kiwi, Grapes, Peach, Strawberry ',
-        role: 'system'
+        role: 'assistant'
       }
     ],
     model: 'gpt-3.5-turbo',
@@ -65,10 +65,8 @@ export class ChatObservableState extends ObservableState<ChatState> {
       openApiKey: '',
       chats: mockChats,
       useEnterToSend: false,
-      currentChatId: ''
+      userProfilePicUrl: ''
     });
-
-    this.connect({});
   }
 
   public toggleSidebar(): void {
@@ -88,6 +86,7 @@ export class ChatObservableState extends ObservableState<ChatState> {
         'You are ChatGPT, a large language model trained by OpenAI.',
       id: uuid
     };
+
     this.patch({ chats: [...this.snapshot.chats, chat] });
   }
 }

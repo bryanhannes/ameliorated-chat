@@ -1,0 +1,30 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+
+.message {
+  &__wrapper {
+    padding: $spacing-xsmall;
+    margin-bottom: $spacing-medium;
+    border-radius: 4px;
+    min-height: 52px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 4px;
+    margin-right: $spacing-xsmall;
+    background: $orange-200;
+    font-size: 2rem;
+    line-height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__content {
+    font-size: 0.9rem;
+  }
+}
