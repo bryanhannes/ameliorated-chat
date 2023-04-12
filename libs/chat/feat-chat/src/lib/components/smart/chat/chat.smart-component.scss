@@ -1,0 +1,23 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+
+.chat {
+  &__wrapper {
+    position: relative;
+    scroll-behavior: smooth;
+    //overflow-y: scroll;
+  }
+
+
+}
+
+
+.chatbox {
+  position: fixed;
+  padding: 1rem 2rem;
+  margin: 0 auto;
+  z-index: 30;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: $white;
+}

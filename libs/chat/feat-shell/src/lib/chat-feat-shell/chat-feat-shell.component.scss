@@ -1,4 +1,5 @@
 @import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
 
 .page {
   display: flex;
@@ -11,7 +12,7 @@
     bottom: 0;
     position: fixed;
     transition: all 0.3s ease-in-out;
-    z-index: 10;
+    z-index: 30;
 
     &-open {
       translate: 0;
@@ -38,5 +39,26 @@
         padding-left: 300px;
       }
     }
+  }
+}
+
+.overlay {
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+  z-index: 20;
+  background-color: rgba($gray-900, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  &-visible {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (min-width: $breakpoint-md) {
+    display: none;
   }
 }

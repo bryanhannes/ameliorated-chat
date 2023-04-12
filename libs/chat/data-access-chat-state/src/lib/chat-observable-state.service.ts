@@ -4,6 +4,7 @@ import { map } from 'rxjs'
 
 export type ChatState = {
   sidebarOpen: boolean
+  openApiKey: string
 }
 
 @Injectable({
@@ -13,7 +14,8 @@ export class ChatObservableState extends ObservableState<ChatState> {
   constructor() {
     super()
     this.initialize({
-      sidebarOpen: false
+      sidebarOpen: false,
+      openApiKey: ''
     })
   }
 
@@ -23,5 +25,9 @@ export class ChatObservableState extends ObservableState<ChatState> {
 
   public toggleSidebar(): void {
     this.patch({ sidebarOpen: !this.snapshot.sidebarOpen })
+  }
+
+  public setOpenApiKey(apiKey: string): void {
+    this.patch({ openApiKey: apiKey })
   }
 }

@@ -6,7 +6,8 @@
         <ng-container ac-sidebar-body>This is my body</ng-container>
       </ac-sidebar>
     </div>
-
+    <button (click)="closeHamburgerMenu()" class="overlay" [ngClass]="{ 'overlay-visible': !vm.sidebarOpen }"></button>
+    
     <div class="page__body" [ngClass]="{ 'page__body-open': vm.sidebarOpen }">
       <ac-header (openHamburgerMenu)="openHamburgerMenu()" (openSettingsMenu)="openSettingsMenu()">
         New Chat

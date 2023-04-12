@@ -1,0 +1,47 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+
+.chatbox {
+  &__wrapper {
+    display: flex;
+    width: 100%;
+    gap: 0.5rem;
+    align-items: flex-end;
+    transition: padding-left 0.3s ease-in-out;
+
+    &-sidebar-open {
+      padding-left: 300px;
+    }
+  }
+
+  &__textarea {
+    min-height: 40px;
+    height: auto;
+    max-height: 400px;
+    border: 1px solid $gray-200;
+    width: 100%;
+    resize: none;
+    border-radius: 4px;
+    padding: 0.4rem 0.75rem;
+    line-height: 1.5rem;
+    font-size: 1rem;
+
+  }
+
+  &__btn-send {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: $orange-100;
+    padding: 0.5rem;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $orange-200;
+    }
+  }
+}
