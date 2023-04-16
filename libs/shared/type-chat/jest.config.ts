@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'chat-type-chat',
+  displayName: 'shared-type-chat',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/chat/type-chat',
+  coverageDirectory: '../../../coverage/libs/shared/type-chat',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -19,4 +19,4 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment'
   ]
-}
+};

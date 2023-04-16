@@ -10,19 +10,26 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ameliorated-chat/api/feat-chat": [
+        "libs/api/feat-chat/src/index.ts"
+      ],
       "@ameliorated-chat/chat/data-access-chat-state": [
         "libs/chat/data-access-chat-state/src/index.ts"
       ],
-      "@ameliorated-chat/chat/feat-chat": ["libs/chat/feat-chat/src/index.ts"],
+      "@ameliorated-chat/chat/feat-chat": [
+        "libs/chat/feat-chat/src/index.ts"
+      ],
       "@ameliorated-chat/chat/feat-shell": [
         "libs/chat/feat-shell/src/index.ts"
       ],
-      "@ameliorated-chat/chat/type-chat": ["libs/chat/type-chat/src/index.ts"],
       "@ameliorated-chat/frontend/ui-design-system": [
         "libs/frontend/ui-design-system/src/index.ts"
       ],
@@ -31,8 +38,14 @@
       ],
       "@ameliorated-chat/frontend/util-uuid": [
         "libs/frontend/util-uuid/src/index.ts"
+      ],
+      "@ameliorated-chat/shared/type-chat": [
+        "libs/shared/type-chat/src/index.ts"
       ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

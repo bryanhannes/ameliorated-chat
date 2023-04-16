@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Message, Role } from '@ameliorated-chat/chat/type-chat';
+import { Message, Role } from '@ameliorated-chat/shared/type-chat';
 import { InputState } from '@ameliorated-chat/frontend/util-state';
 import { map, Observable } from 'rxjs';
 
@@ -30,7 +30,7 @@ export class ChatMessageUiComponent {
   public readonly vm$: Observable<ViewModel> = this.inputState$.pipe(
     map(({ message }) => {
       return {
-        message: message?.message ?? '',
+        message: message?.content ?? '',
         avatarUrl: getAvatar(message?.role ?? 'user'),
         isUserMessage: message?.role === 'user'
       };

@@ -9,7 +9,7 @@ import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { FacadeService } from '../facade.service';
 import { map, Observable } from 'rxjs';
 import { SidebarContentSmartComponent } from '@ameliorated-chat/chat/feat-chat';
-import { Chat } from '@ameliorated-chat/chat/type-chat';
+import { Chat } from '@ameliorated-chat/shared/type-chat';
 
 type PageViewModel = {
   sidebarOpen: boolean;

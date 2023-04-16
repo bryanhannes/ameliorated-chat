@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChatboxUiComponent } from '../../ui/chatbox/chatbox.ui-component';
 import { AppInfoUiComponent } from '../../ui/app-info/app-info.ui-component';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat } from '@ameliorated-chat/chat/type-chat';
+import { Chat } from '@ameliorated-chat/shared/type-chat';
 import { FacadeService } from '../../../facade.service';
 import { map, Observable, pipe, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';

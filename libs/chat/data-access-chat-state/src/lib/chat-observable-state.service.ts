@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat } from '@ameliorated-chat/chat/type-chat';
+import { Chat } from '@ameliorated-chat/shared/type-chat';
 
 export type ChatState = {
   sidebarOpen: boolean;
@@ -15,15 +15,15 @@ const mockChats: Chat[] = [
     title: '(Example) Fix math problem',
     messages: [
       {
-        message: 'You are ChatGPT, a large language model trained by OpenAI.',
+        content: 'You are ChatGPT, a large language model trained by OpenAI.',
         role: 'system'
       },
       {
-        message: 'What is 1 + 1?',
+        content: 'What is 1 + 1?',
         role: 'user'
       },
       {
-        message: '1 + 1 equals 2',
+        content: '1 + 1 equals 2',
         role: 'assistant'
       }
     ],
@@ -35,15 +35,15 @@ const mockChats: Chat[] = [
     title: '(Example) Fruits',
     messages: [
       {
-        message: 'You are ChatGPT, a large language model trained by OpenAI.',
+        content: 'You are ChatGPT, a large language model trained by OpenAI.',
         role: 'system'
       },
       {
-        message: 'Name 10 fruits',
+        content: 'Name 10 fruits',
         role: 'user'
       },
       {
-        message:
+        content:
           'Apple, Banana, Orange, Pineapple, Mango, Watermelon, Kiwi, Grapes, Peach, Strawberry ',
         role: 'assistant'
       }
