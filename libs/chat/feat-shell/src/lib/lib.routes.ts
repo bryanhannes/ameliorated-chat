@@ -8,6 +8,10 @@ export const chatFeatShellRoutes: Route[] = [
     component: ChatFeatShellComponent,
     children: [
       {
+        path: '',
+        component: ChatSmartComponent
+      },
+      {
         path: ':id',
         component: ChatSmartComponent
       }

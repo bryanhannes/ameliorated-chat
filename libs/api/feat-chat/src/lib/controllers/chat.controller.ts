@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
 import { ChatService } from '../services/chat.service';
 import { Message } from '@ameliorated-chat/shared/type-chat';
 
 @Controller('chat')
 export class ChatController {
   @Post()
+  @HttpCode(200)
   async getChatCompletion(
     @Body('messages') messages: Message[],
     @Body('apiKey') apiKey: string,
@@ -22,7 +23,7 @@ export class ChatController {
 
     response.setHeader('Content-Type', 'text/plain');
     response.setHeader('Transfer-Encoding', 'chunked');
-
+    response.setHeader('Acess-Control-Allow-Origin', 'http://localhost:4200');
     stream.on('data', (chunk: Buffer) => {
       // Messages in the event stream are separated by a pair of newline characters.
       const payloads = chunk.toString().split('\n\n');
@@ -32,8 +33,10 @@ export class ChatController {
           const data = payload.replace(/(\n)?^data:\s*/g, ''); // in case there's multiline data event
           try {
             const delta = JSON.parse(data.trim());
-            response.write(delta.choices[0].delta?.content);
-            console.log(delta.choices[0].delta?.content);
+            if (delta.choices[0].delta?.content) {
+              response.write(delta.choices[0].delta?.content);
+              console.log(delta.choices[0].delta?.content);
+            }
           } catch (error) {
             console.log(`Error with JSON.parse and ${payload}.\n${error}`);
           }
@@ -46,8 +49,8 @@ export class ChatController {
       response.end();
     });
     stream.on('error', (e: Error) => {
+      console.error('Error', e);
       response.end();
-      console.error(e);
     });
   }
 

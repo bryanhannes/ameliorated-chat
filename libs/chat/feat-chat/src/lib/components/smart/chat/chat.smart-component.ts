@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { ChatboxUiComponent } from '../../ui/chatbox/chatbox.ui-component';
 import { AppInfoUiComponent } from '../../ui/app-info/app-info.ui-component';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat } from '@ameliorated-chat/shared/type-chat';
+import { Chat, Message } from '@ameliorated-chat/shared/type-chat';
 import { FacadeService } from '../../../facade.service';
-import { map, Observable, pipe, tap } from 'rxjs';
+import { map, Observable, pipe } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-component';
 
@@ -35,13 +35,13 @@ export class ChatSmartComponent extends ObservableState<State> {
   private readonly facade = inject(FacadeService);
   private readonly chatObservableState = this.facade.chatObservableState;
   private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly viewportScroller = inject(ViewportScroller);
 
   public readonly vm$: Observable<ViewModel> = this.onlySelectWhen([
     'chat'
-  ]).pipe(
-    map(({ chat }) => ({ chat })),
-    tap(console.log)
-  );
+  ]).pipe(map(({ chat }) => ({ chat })));
+
+  public readonly tracker = (i: number) => i;
 
   constructor() {
     super();
@@ -63,7 +63,40 @@ export class ChatSmartComponent extends ObservableState<State> {
   }
 
   public newChatMessage(message: string): void {
-    console.log(message);
+    this.chatObservableState.newChatMessage(
+      message,
+      this.snapshot.currentChatId
+    );
+
+    const messages: Message[] =
+      this.chatObservableState.snapshot.chats.find(
+        (chat) => chat.id === this.snapshot.currentChatId
+      )?.messages || [];
+
+    if (messages.length > 0) {
+      this.facade.newChatMessage(messages).subscribe((answer) => {
+        this.chatObservableState.patch({
+          chats: this.chatObservableState.snapshot.chats.map((chat) =>
+            chat.id === this.snapshot.currentChatId
+              ? {
+                  ...chat,
+                  messages: [
+                    ...chat.messages,
+                    {
+                      content: answer,
+                      role: 'assistant'
+                    }
+                  ]
+                }
+              : chat
+          )
+        });
+
+        console.log(this.chatObservableState.snapshot.chats);
+
+        this.viewportScroller.scrollToPosition([0, 9999999]);
+      });
+    }
   }
 }
 

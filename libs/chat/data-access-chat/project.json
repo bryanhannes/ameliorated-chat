@@ -1,0 +1,41 @@
+{
+  "name": "chat-data-access-chat",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/chat/data-access-chat/src",
+  "prefix": "ac",
+  "tags": [
+    "scope:chat",
+    "type:data-access"
+  ],
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/chat/data-access-chat/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/chat/data-access-chat/**/*.ts",
+          "libs/chat/data-access-chat/**/*.html"
+        ]
+      }
+    }
+  }
+}

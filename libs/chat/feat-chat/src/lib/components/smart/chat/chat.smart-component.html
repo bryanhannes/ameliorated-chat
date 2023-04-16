@@ -2,7 +2,7 @@
   <ac-app-info></ac-app-info>
 
   <div class="chat__messages" *ngIf="vm.chat">
-    <ac-chat-message *ngFor="let message of vm.chat.messages" [message]="message"></ac-chat-message>
+    <ac-chat-message *ngFor="let message of vm.chat.messages; trackBy: tracker" [message]="message"></ac-chat-message>
   </div>
 
   <div class="chatbox">

@@ -89,4 +89,33 @@ export class ChatObservableState extends ObservableState<ChatState> {
 
     this.patch({ chats: [...this.snapshot.chats, chat] });
   }
+
+  public newChatMessage(message: string, currentChatId: string): void {
+    const currentChat = this.snapshot.chats.find(
+      (chat) => chat.id === currentChatId
+    );
+
+    if (currentChat) {
+      const newChat: Chat = {
+        ...currentChat,
+        messages: [
+          ...currentChat.messages,
+          {
+            content: message,
+            role: 'user'
+          }
+        ]
+      };
+
+      const newChats: Chat[] = this.snapshot.chats.map((chat) => {
+        if (chat.id === currentChatId) {
+          return newChat;
+        } else {
+          return chat;
+        }
+      });
+
+      this.patch({ chats: newChats });
+    }
+  }
 }

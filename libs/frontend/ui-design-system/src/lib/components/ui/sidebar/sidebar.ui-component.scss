@@ -38,7 +38,7 @@
   }
 
   &__content {
-    width: calc(300px + 3rem);
+    //width: calc(300px + 3rem);
 
     @media screen and (min-width: $breakpoint-md) {
       width: 300px;

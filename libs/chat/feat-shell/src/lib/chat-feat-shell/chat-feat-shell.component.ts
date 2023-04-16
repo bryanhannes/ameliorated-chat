@@ -4,7 +4,7 @@ import {
   HeaderUiComponent,
   SidebarUiComponent
 } from '@ameliorated-chat/frontend/ui-design-system';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { FacadeService } from '../facade.service';
 import { map, Observable } from 'rxjs';
@@ -39,7 +39,6 @@ type State = {
 export class ChatFeatShellComponent extends ObservableState<State> {
   private readonly facade = inject(FacadeService);
   private readonly chatObservableState = this.facade.chatObservableState;
-  private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
 
   public readonly vm$: Observable<PageViewModel> = this.onlySelectWhen([

@@ -12,6 +12,12 @@
     &-sidebar-open {
       padding-left: 300px;
     }
+
+    @media (max-width: $breakpoint-md) {
+      &-sidebar-open {
+        padding-left: 0;
+      }
+    }
   }
 
   &__textarea {
@@ -26,6 +32,9 @@
     line-height: 1.5rem;
     font-size: 1rem;
 
+    @media (max-width: $breakpoint-md) {
+      max-height: 200px;
+    }
   }
 
   &__btn-send {

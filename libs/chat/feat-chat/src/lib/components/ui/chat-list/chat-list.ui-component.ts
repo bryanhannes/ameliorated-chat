@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  TrackByFunction
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chat } from '@ameliorated-chat/shared/type-chat';
 import { RouterLink } from '@angular/router';
@@ -14,4 +19,5 @@ import { RouterLink } from '@angular/router';
 export class ChatListUiComponent {
   @Input() public chats: Chat[] = [];
   @Input() public currentChatId: string | null = null;
+  public readonly tracker: TrackByFunction<Chat> = (index, item) => item.id;
 }
