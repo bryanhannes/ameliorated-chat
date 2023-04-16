@@ -1,0 +1,15 @@
+<ac-dialog (closeDialog)="closeDialog.emit()">
+  <ng-container ac-dialog-header>
+    <h1>Enter your OpenAI API key</h1>
+  </ng-container>
+  <ng-container ac-dialog-body>
+    <form ngForm (ngSubmit)="submitForm()">
+      <div class="form-control">
+        <label for="api-key">You OpenAI API is stored locally and is never sent anywhere.</label>
+        <input type="text" name="api-key" id="api-key" class="input__text" [(ngModel)]="apiKey" required
+               placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+      </div>
+      <button class="button-ok" type="submit">Save API Key</button>
+    </form>
+  </ng-container>
+</ac-dialog>

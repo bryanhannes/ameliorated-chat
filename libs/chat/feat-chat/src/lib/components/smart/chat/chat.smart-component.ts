@@ -8,15 +8,20 @@ import { FacadeService } from '../../../facade.service';
 import { map, Observable, pipe } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-component';
+import { ApiKeyInputDialogComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.component';
 
 type ViewModel = {
   chat: Chat | null;
+  inputApiKeyDialogVisible: boolean;
+  showInputApiKey: boolean;
 };
 
 type State = {
   chat: Chat | null;
   chats: Chat[];
   currentChatId: string;
+  inputApiKeyDialogVisible: boolean;
+  openApiKey: string;
 };
 
 @Component({
@@ -26,7 +31,8 @@ type State = {
     CommonModule,
     ChatboxUiComponent,
     AppInfoUiComponent,
-    ChatMessageUiComponent
+    ChatMessageUiComponent,
+    ApiKeyInputDialogComponent
   ],
   templateUrl: './chat.smart-component.html',
   styleUrls: ['./chat.smart-component.scss']
@@ -38,8 +44,16 @@ export class ChatSmartComponent extends ObservableState<State> {
   private readonly viewportScroller = inject(ViewportScroller);
 
   public readonly vm$: Observable<ViewModel> = this.onlySelectWhen([
-    'chat'
-  ]).pipe(map(({ chat }) => ({ chat })));
+    'chat',
+    'inputApiKeyDialogVisible',
+    'openApiKey'
+  ]).pipe(
+    map(({ chat, inputApiKeyDialogVisible, openApiKey }) => ({
+      chat,
+      inputApiKeyDialogVisible,
+      showInputApiKey: openApiKey.length === 0
+    }))
+  );
 
   public readonly tracker = (i: number) => i;
 
@@ -48,7 +62,9 @@ export class ChatSmartComponent extends ObservableState<State> {
     this.initialize({
       chat: null,
       chats: [],
-      currentChatId: this.activatedRoute.snapshot.params['id']
+      currentChatId: this.activatedRoute.snapshot.params['id'],
+      inputApiKeyDialogVisible: false,
+      openApiKey: this.chatObservableState.snapshot.openApiKey
     });
 
     const currentChatId$ = this.activatedRoute.params.pipe(
@@ -56,13 +72,18 @@ export class ChatSmartComponent extends ObservableState<State> {
     );
 
     this.connect({
-      ...this.chatObservableState.pick(['chats']),
+      ...this.chatObservableState.pick(['chats', 'openApiKey']),
       currentChatId: currentChatId$,
       chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
     });
   }
 
   public newChatMessage(message: string): void {
+    if (this.snapshot.openApiKey.length === 0) {
+      this.openInputApiKeyDialog();
+      return;
+    }
+
     this.chatObservableState.newChatMessage(
       message,
       this.snapshot.currentChatId
@@ -75,28 +96,31 @@ export class ChatSmartComponent extends ObservableState<State> {
 
     if (messages.length > 0) {
       this.facade.newChatMessage(messages).subscribe((answer) => {
-        this.chatObservableState.patch({
-          chats: this.chatObservableState.snapshot.chats.map((chat) =>
-            chat.id === this.snapshot.currentChatId
-              ? {
-                  ...chat,
-                  messages: [
-                    ...chat.messages,
-                    {
-                      content: answer,
-                      role: 'assistant'
-                    }
-                  ]
-                }
-              : chat
-          )
-        });
-
-        console.log(this.chatObservableState.snapshot.chats);
-
+        this.chatObservableState.newChatMessage(
+          answer,
+          this.snapshot.currentChatId,
+          'assistant'
+        );
         this.viewportScroller.scrollToPosition([0, 9999999]);
       });
     }
+  }
+
+  public openInputApiKeyDialog(): void {
+    this.patch({
+      inputApiKeyDialogVisible: true
+    });
+  }
+
+  public closeInputApiKeyDialog(): void {
+    this.patch({
+      inputApiKeyDialogVisible: false
+    });
+  }
+
+  public setApiKey(apiKey: string): void {
+    this.chatObservableState.setOpenApiKey(apiKey);
+    this.closeInputApiKeyDialog();
   }
 }
 

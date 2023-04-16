@@ -1,5 +1,6 @@
 @import 'libs/frontend/ui-design-system/src/lib/styling/colors';
 @import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
 
 .chat {
   &__wrapper {
@@ -8,10 +9,40 @@
     //overflow-y: scroll;
   }
 
+  &__api-key__wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-medium;
+    margin-bottom: $spacing-large;
+
+    @media (min-width: $breakpoint-sm) {
+      flex-direction: row;
+    }
+  }
+
+  &__button-api-key {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    //width: 150px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: $orange-400;
+    padding: 0.5rem;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $orange-200;
+    }
+  }
+
   &__messages {
     margin-bottom: 75px;
   }
-
 
 }
 

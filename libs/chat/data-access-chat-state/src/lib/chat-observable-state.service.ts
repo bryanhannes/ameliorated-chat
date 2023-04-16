@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat } from '@ameliorated-chat/shared/type-chat';
+import { Chat, Role } from '@ameliorated-chat/shared/type-chat';
+import {
+  getFromLocalStorage,
+  patchLocalStorage
+} from '@ameliorated-chat/frontend/util-local-storage';
 
 export type ChatState = {
   sidebarOpen: boolean;
@@ -61,36 +65,51 @@ export class ChatObservableState extends ObservableState<ChatState> {
   constructor() {
     super();
     this.initialize({
-      sidebarOpen: true,
-      openApiKey: '',
-      chats: mockChats,
-      useEnterToSend: false,
-      userProfilePicUrl: ''
+      sidebarOpen: getFromLocalStorage('sidebarOpen', false),
+      openApiKey: getFromLocalStorage('openApiKey', ''),
+      chats: getFromLocalStorage('chats', mockChats),
+      useEnterToSend: getFromLocalStorage('useEnterToSend', false),
+      userProfilePicUrl: getFromLocalStorage('userProfilePicUrl', '')
     });
   }
 
   public toggleSidebar(): void {
-    this.patch({ sidebarOpen: !this.snapshot.sidebarOpen });
+    const sidebarOpen = !this.snapshot.sidebarOpen;
+    this.patch({ sidebarOpen });
+    patchLocalStorage('sidebarOpen', sidebarOpen);
   }
 
   public setOpenApiKey(apiKey: string): void {
     this.patch({ openApiKey: apiKey });
+    patchLocalStorage('openApiKey', apiKey);
   }
 
   public newChat(uuid: string): void {
     const chat: Chat = {
       title: 'New Chat',
-      messages: [],
+      messages: [
+        {
+          content: 'You are ChatGPT, a large language model trained by OpenAI.',
+          role: 'system'
+        }
+      ],
       model: 'gpt-3.5-turbo',
       systemMessage:
         'You are ChatGPT, a large language model trained by OpenAI.',
       id: uuid
     };
 
-    this.patch({ chats: [...this.snapshot.chats, chat] });
+    const chats: Chat[] = [...this.snapshot.chats, chat];
+    this.patch({ chats });
+
+    patchLocalStorage('chats', chats);
   }
 
-  public newChatMessage(message: string, currentChatId: string): void {
+  public newChatMessage(
+    message: string,
+    currentChatId: string,
+    role: Role = 'user'
+  ): void {
     const currentChat = this.snapshot.chats.find(
       (chat) => chat.id === currentChatId
     );
@@ -102,7 +121,7 @@ export class ChatObservableState extends ObservableState<ChatState> {
           ...currentChat.messages,
           {
             content: message,
-            role: 'user'
+            role: role
           }
         ]
       };
@@ -116,6 +135,7 @@ export class ChatObservableState extends ObservableState<ChatState> {
       });
 
       this.patch({ chats: newChats });
+      patchLocalStorage('chats', newChats);
     }
   }
 }

@@ -1,11 +1,24 @@
-<div class="chat__wrapper" *ngIf="vm$ | async as vm">
-  <ac-app-info></ac-app-info>
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="chat__wrapper">
+    <ac-app-info></ac-app-info>
 
-  <div class="chat__messages" *ngIf="vm.chat">
-    <ac-chat-message *ngFor="let message of vm.chat.messages; trackBy: tracker" [message]="message"></ac-chat-message>
+    <div class="chat__api-key__wrapper" *ngIf="vm.showInputApiKey">
+      <p>Enter your OpenAI API key to get started.</p>
+      <button class="chat__button-api-key" (click)="openInputApiKeyDialog()">Enter API Key</button>
+      <ac-api-key-input-dialog *ngIf="vm.inputApiKeyDialogVisible"
+                               (apiKeyEntered)="setApiKey($event)"
+                               (closeDialog)="closeInputApiKeyDialog()"></ac-api-key-input-dialog>
+    </div>
+
+    <div class="chat__messages" *ngIf="vm.chat">
+      <ac-chat-message *ngFor="let message of vm.chat.messages; trackBy: tracker" [message]="message"></ac-chat-message>
+    </div>
+
+    <div class="chatbox">
+      <ac-chatbox (newMessage)="newChatMessage($event)"></ac-chatbox>
+    </div>
   </div>
 
-  <div class="chatbox">
-    <ac-chatbox (newMessage)="newChatMessage($event)"></ac-chatbox>
-  </div>
-</div>
+
+</ng-container>
+
