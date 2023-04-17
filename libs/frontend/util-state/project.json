@@ -1,0 +1,41 @@
+{
+  "name": "frontend-util-state",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/frontend/util-state/src",
+  "prefix": "ac",
+  "tags": [
+    "scope:frontend",
+    "type:util"
+  ],
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "libs/frontend/util-state/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "libs/frontend/util-state/**/*.ts",
+          "libs/frontend/util-state/**/*.html"
+        ]
+      }
+    }
+  }
+}

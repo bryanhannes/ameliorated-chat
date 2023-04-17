@@ -1,0 +1,21 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+
+.chats {
+  &__item {
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-medium;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $gray-300;
+    }
+
+    &--active {
+      background-color: $gray-300;
+    }
+  }
+}
+

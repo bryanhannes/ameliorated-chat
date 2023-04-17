@@ -1,0 +1,23 @@
+@import '../../../styling/spacing';
+@import '../../../styling/colors';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px $spacing-small;
+  box-shadow: 0 0.125rem 0.25rem $gray-400;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &__button {
+    padding: $spacing-xsmall;
+
+    &:hover {
+      background-color: $gray-200;
+    }
+  }
+}

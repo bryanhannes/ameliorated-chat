@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="page">
+    <div class="page__sidebar" [ngClass]="{ 'page__sidebar-open': vm.sidebarOpen }">
+      <ac-sidebar (closeSidebar)="closeHamburgerMenu()">
+        <ng-container ac-sidebar-body>
+          <ac-sidebar-content></ac-sidebar-content>
+        </ng-container>
+      </ac-sidebar>
+    </div>
+    <button (click)="closeHamburgerMenu()" class="overlay" [ngClass]="{ 'overlay-visible': !vm.sidebarOpen }"></button>
+
+    <div class="page__body" [ngClass]="{ 'page__body-open': vm.sidebarOpen }">
+      <ac-header (openHamburgerMenu)="openHamburgerMenu()" (openSettingsMenu)="openSettingsMenu()">
+        {{vm.currentChatTitle}}
+      </ac-header>
+      <main>
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+</ng-container>
+

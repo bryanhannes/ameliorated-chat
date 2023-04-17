@@ -1,0 +1,71 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+@import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
+
+.app-info {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem 0;
+    text-align: center;
+
+    .header__chat {
+      color: $orange-500;
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: bold;
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-medium;
+      align-items: center;
+      margin-bottom: $spacing-small;
+    }
+
+    .slug {
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+  }
+
+  &__feature-list {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    row-gap: 0.5rem;
+    column-gap: 1.5rem;
+    margin: 2rem auto;
+
+    @media (min-width: $breakpoint-sm) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    &__item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1rem;
+
+      &:before {
+        content: '✓';
+        width: 1.2rem;
+        height: 1.2rem;
+        background: $orange-500;
+        border-radius: 50%;
+        font-size: 0.8rem;
+        color: white;
+        line-height: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.brand-logo {
+  width: 60px;
+  height: auto;
+}

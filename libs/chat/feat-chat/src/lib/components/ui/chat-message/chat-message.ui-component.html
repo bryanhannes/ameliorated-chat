@@ -1,0 +1,14 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="message__wrapper">
+    <div class="message__avatar">
+      {{vm.avatarUrl}}
+      <img [src]="" alt="">
+    </div>
+    <div class="message__content"
+         [ngClass]="{
+    'message__content--user': vm.isUserMessage
+    }">
+      {{ vm.message }}
+    </div>
+  </div>
+</ng-container>

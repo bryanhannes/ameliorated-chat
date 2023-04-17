@@ -1,0 +1,11 @@
+<ng-template cdkPortal>
+  <div class="dialog">
+    <div class="dialog__header">
+      <ng-content select="[ac-dialog-header]"></ng-content>
+      <button (click)="closeDialog.emit()" class="button__close">Ｘ <span class="sr-only">Close</span></button>
+    </div>
+    <div class="dialog__body">
+      <ng-content select="[ac-dialog-body]"></ng-content>
+    </div>
+  </div>
+</ng-template>

@@ -24,6 +24,26 @@
         "production",
         "^production"
       ]
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/jest.preset.js"
+      ]
+    },
+    "e2e": {
+      "inputs": [
+        "default",
+        "^production"
+      ]
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore"
+      ]
     }
   },
   "namedInputs": {
@@ -32,8 +52,51 @@
       "sharedGlobals"
     ],
     "production": [
-      "default"
+      "default",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/.eslintrc.json"
     ],
     "sharedGlobals": []
-  }
+  },
+  "generators": {
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress",
+      "skipTests": true,
+      "standalone": true,
+      "routing": true,
+      "prefix": "ac"
+    },
+    "@nrwl/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "style": "scss",
+      "prefix": "ac",
+      "skipModule": true,
+      "skipTests": true,
+      "standalone": true
+    },
+    "@nrwl/angular:component": {
+      "style": "scss",
+      "skipTests": true,
+      "standalone": true,
+      "prefix": "ac"
+    },
+    "@nrwl/angular:service": {
+      "skipTests": true
+    },
+    "@nrwl/nest:service": {
+      "flat": true,
+      "unitTestRunner": "none"
+    },
+    "@nrwl/nest:controller": {
+      "flat": true,
+      "unitTestRunner": "none"
+    }
+  },
+  "defaultProject": "chat"
 }

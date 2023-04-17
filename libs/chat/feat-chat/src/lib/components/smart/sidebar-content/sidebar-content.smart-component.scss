@@ -1,0 +1,33 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+
+.toolbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: $spacing-medium;
+  box-sizing: border-box;
+  gap: $spacing-xsmall;
+
+  &__search {
+    &__input {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      width: 100%;
+      border: 1px solid $gray-300;
+    }
+  }
+}
+
+.button__new-chat {
+  background: $gray-300;
+  padding: $spacing-xsmall;
+  border-radius: 4px;
+  transition: 0.3s ease-in-out;
+
+  &:hover {
+    background: $gray-400;
+  }
+}
+
