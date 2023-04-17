@@ -34,7 +34,9 @@ If you have any suggestions, please open an issue or make a contribution.
 - [ ] A title should be automatically generated when creating a new chat
 - [ ] As a user I should be able to update the title of a chat
 - [ ] As a user I should be able to update my profile picture
-- [ ] A prompt library
+- [ ] Nice loading animations
+- [ ] Streaming the chat response
+- [ ] As a user I should be able to select a prompt from a prompt library
 
 ## Running the project
 
@@ -51,3 +53,8 @@ Run `nx run api:serve` to start the Nest back end
 ## Suggestions
 
 If you have any suggestions how to improve this project, please open an issue or make a contribution.
+
+## Credits
+
+- Ameliorated Chat is inspired by [TypingMind]('https://www.typingmind.com/') build
+  by [Tony Dinh]('https://twitter.com/tdinh_me')
