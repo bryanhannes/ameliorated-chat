@@ -1,4 +1,5 @@
 @import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
 @import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
 
 .app-info {
@@ -17,6 +18,11 @@
     h1 {
       font-size: 2.3rem;
       font-weight: bold;
+      display: flex;
+      flex-direction: row;
+      gap: $spacing-medium;
+      align-items: center;
+      margin-bottom: $spacing-small;
     }
 
     .slug {
@@ -57,4 +63,9 @@
       }
     }
   }
+}
+
+.brand-logo {
+  width: 60px;
+  height: auto;
 }
