@@ -56,5 +56,5 @@ If you have any suggestions how to improve this project, please open an issue or
 
 ## Credits
 
-- Ameliorated Chat is inspired by [TypingMind]('https://www.typingmind.com/') build
-  by [Tony Dinh]('https://twitter.com/tdinh_me')
+- Ameliorated Chat is inspired by [TypingMind](https://www.typingmind.com/) build
+  by [Tony Dinh](https://twitter.com/tdinh_me)
