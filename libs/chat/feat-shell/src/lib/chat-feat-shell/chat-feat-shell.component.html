@@ -5,6 +5,10 @@
         <ng-container ac-sidebar-body>
           <ac-sidebar-content></ac-sidebar-content>
         </ng-container>
+
+        <ng-container ac-sidebar-footer>
+          <ac-sidebar-footer-content></ac-sidebar-footer-content>
+        </ng-container>
       </ac-sidebar>
     </div>
     <button (click)="closeHamburgerMenu()" class="overlay" [ngClass]="{ 'overlay-visible': !vm.sidebarOpen }"></button>

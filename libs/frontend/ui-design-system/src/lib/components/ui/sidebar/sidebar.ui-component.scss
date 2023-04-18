@@ -14,7 +14,10 @@
   }
 
   &__body {
+  }
 
+  &__footer {
+    margin-top: auto;
   }
 
   &__close {
@@ -38,7 +41,9 @@
   }
 
   &__content {
-    //width: calc(300px + 3rem);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 
     @media screen and (min-width: $breakpoint-md) {
       width: 300px;

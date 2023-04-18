@@ -8,10 +8,11 @@ import {
 
 export type ChatState = {
   sidebarOpen: boolean;
-  openApiKey: string;
+  openAIApiKey: string;
   chats: Chat[];
   useEnterToSend: boolean; // Still need to implement this;
   userProfilePicUrl: string;
+  inputApiKeyDialogVisible: boolean;
 };
 
 const mockChats: Chat[] = [
@@ -66,10 +67,11 @@ export class ChatObservableState extends ObservableState<ChatState> {
     super();
     this.initialize({
       sidebarOpen: getFromLocalStorage('sidebarOpen', false),
-      openApiKey: getFromLocalStorage('openApiKey', ''),
+      openAIApiKey: getFromLocalStorage('openApiKey', ''),
       chats: getFromLocalStorage('chats', mockChats),
       useEnterToSend: getFromLocalStorage('useEnterToSend', false),
-      userProfilePicUrl: getFromLocalStorage('userProfilePicUrl', '')
+      userProfilePicUrl: getFromLocalStorage('userProfilePicUrl', ''),
+      inputApiKeyDialogVisible: false
     });
   }
 
@@ -80,7 +82,7 @@ export class ChatObservableState extends ObservableState<ChatState> {
   }
 
   public setOpenApiKey(apiKey: string): void {
-    this.patch({ openApiKey: apiKey });
+    this.patch({ openAIApiKey: apiKey });
     patchLocalStorage('openApiKey', apiKey);
   }
 
@@ -137,5 +139,13 @@ export class ChatObservableState extends ObservableState<ChatState> {
       this.patch({ chats: newChats });
       patchLocalStorage('chats', newChats);
     }
+  }
+
+  public openInputApiKeyDialog(): void {
+    this.patch({ inputApiKeyDialogVisible: true });
+  }
+
+  public closeInputApiKeyDialog(): void {
+    this.patch({ inputApiKeyDialogVisible: false });
   }
 }
