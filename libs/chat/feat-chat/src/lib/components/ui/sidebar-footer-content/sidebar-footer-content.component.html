@@ -1,0 +1,23 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="api-key__wrapper">
+    <div class="api-key__label">OpenAI API Key</div>
+    <button class="button-api-key" (click)="openInputApiKeyDialog()">{{vm.buttonApiKeyLabel}}</button>
+  </div>
+
+
+  <div class="credits">Build for the community by <a href="https://twitter.com/BryanHannes" target="_blank">Bryan
+    Hannes</a></div>
+
+  <div class="socials-list">
+    <div class="socials-list-item">
+      <a href="https://twitter.com/BryanHannes" class="socials-list-item-link" target="_blank">
+        <svg acGithubIcon class="social-list-item-icon"></svg>
+      </a></div>
+    <div class="socials-list-item">
+      <a href="https://github.com/bryanhannes/ameliorated-chat" class="socials-list-item-link" target="_blank">
+        <svg acTwitterIcon class="social-list-item-icon"></svg>
+      </a>
+    </div>
+  </div>
+</ng-container>
+

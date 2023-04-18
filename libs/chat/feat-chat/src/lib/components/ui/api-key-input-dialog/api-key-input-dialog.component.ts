@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -17,7 +18,7 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApiKeyInputDialogComponent {
-  public apiKey = '';
+  @Input() public apiKey = '';
   @Output() public readonly apiKeyEntered = new EventEmitter<string>();
   @Output() public readonly closeDialog = new EventEmitter<void>();
 

@@ -1,0 +1,71 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+
+:host {
+  background: $gray-200;
+  display: block;
+  padding: $spacing-medium $spacing-medium 0;
+  font-size: 0.8rem;
+
+}
+
+.api-key {
+  &__wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: $spacing-small;
+    border-bottom: 1px solid $gray-400;
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+}
+
+.button-api-key {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: $orange-200;
+  padding: 0.2rem;
+  transition: all 0.2s ease-in-out;
+  font-weight: 600;
+
+  &:hover {
+    background-color: $orange-200;
+  }
+}
+
+.credits {
+  text-align: center;
+  padding-top: $spacing-small;
+}
+
+a {
+  color: $orange-600;
+  text-decoration: underline;
+}
+
+.socials-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: $spacing-small;
+  padding: $spacing-small;
+}
+
+.social-list-item-icon {
+  width: 16px;
+  height: 16px;
+  transition: 0.3s ease-in-out;
+  fill: $black;
+
+  &:hover {
+    cursor: pointer;
+    fill: $gray-700
+  }
+}

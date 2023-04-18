@@ -10,6 +10,7 @@ import { FacadeService } from '../facade.service';
 import { map, Observable } from 'rxjs';
 import { SidebarContentSmartComponent } from '@ameliorated-chat/chat/feat-chat';
 import { Chat } from '@ameliorated-chat/shared/type-chat';
+import { SidebarFooterContentComponent } from '../../../../feat-chat/src/lib/components/ui/sidebar-footer-content/sidebar-footer-content.component';
 
 type PageViewModel = {
   sidebarOpen: boolean;
@@ -31,7 +32,8 @@ type State = {
     HeaderUiComponent,
     RouterOutlet,
     SidebarUiComponent,
-    SidebarContentSmartComponent
+    SidebarContentSmartComponent,
+    SidebarFooterContentComponent
   ],
   templateUrl: './chat-feat-shell.component.html',
   styleUrls: ['./chat-feat-shell.component.scss']

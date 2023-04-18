@@ -14,6 +14,7 @@ type ViewModel = {
   chat: Chat | null;
   inputApiKeyDialogVisible: boolean;
   showInputApiKey: boolean;
+  openAIApiKey: string;
 };
 
 type State = {
@@ -21,7 +22,7 @@ type State = {
   chats: Chat[];
   currentChatId: string;
   inputApiKeyDialogVisible: boolean;
-  openApiKey: string;
+  openAIApiKey: string;
 };
 
 @Component({
@@ -46,12 +47,13 @@ export class ChatSmartComponent extends ObservableState<State> {
   public readonly vm$: Observable<ViewModel> = this.onlySelectWhen([
     'chat',
     'inputApiKeyDialogVisible',
-    'openApiKey'
+    'openAIApiKey'
   ]).pipe(
-    map(({ chat, inputApiKeyDialogVisible, openApiKey }) => ({
+    map(({ chat, inputApiKeyDialogVisible, openAIApiKey }) => ({
       chat,
       inputApiKeyDialogVisible,
-      showInputApiKey: openApiKey.length === 0
+      showInputApiKey: openAIApiKey.length === 0,
+      openAIApiKey
     }))
   );
 
@@ -64,7 +66,7 @@ export class ChatSmartComponent extends ObservableState<State> {
       chats: [],
       currentChatId: this.activatedRoute.snapshot.params['id'],
       inputApiKeyDialogVisible: false,
-      openApiKey: this.chatObservableState.snapshot.openApiKey
+      openAIApiKey: this.chatObservableState.snapshot.openAIApiKey
     });
 
     const currentChatId$ = this.activatedRoute.params.pipe(
@@ -72,14 +74,18 @@ export class ChatSmartComponent extends ObservableState<State> {
     );
 
     this.connect({
-      ...this.chatObservableState.pick(['chats', 'openApiKey']),
+      ...this.chatObservableState.pick([
+        'chats',
+        'openAIApiKey',
+        'inputApiKeyDialogVisible'
+      ]),
       currentChatId: currentChatId$,
       chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
     });
   }
 
   public newChatMessage(message: string): void {
-    if (this.snapshot.openApiKey.length === 0) {
+    if (this.snapshot.openAIApiKey.length === 0) {
       this.openInputApiKeyDialog();
       return;
     }
@@ -107,15 +113,11 @@ export class ChatSmartComponent extends ObservableState<State> {
   }
 
   public openInputApiKeyDialog(): void {
-    this.patch({
-      inputApiKeyDialogVisible: true
-    });
+    this.chatObservableState.openInputApiKeyDialog();
   }
 
   public closeInputApiKeyDialog(): void {
-    this.patch({
-      inputApiKeyDialogVisible: false
-    });
+    this.chatObservableState.closeInputApiKeyDialog();
   }
 
   public setApiKey(apiKey: string): void {
