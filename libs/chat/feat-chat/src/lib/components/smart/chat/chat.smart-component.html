@@ -13,14 +13,23 @@
                              (closeDialog)="closeInputApiKeyDialog()"></ac-api-key-input-dialog>
 
     <div class="chat__messages" *ngIf="vm.chat">
-      <ac-chat-message *ngFor="let message of vm.chat.messages; trackBy: tracker" [message]="message"></ac-chat-message>
+      <ac-chat-message *ngFor="let message of vm.chat.messages; trackBy: tracker" [message]="message"
+                       [userProfilePicUrl]="vm.userProfilePicUrl"
+                       (userProfilePicClicked)="openUserProfileDialog()"
+      ></ac-chat-message>
     </div>
+
+    <ac-profile-pic-input-dialog *ngIf="vm.userProfilePicDialogVisible"
+                                 [userProfilePicUrl]="vm.userProfilePicUrl"
+                                 (clearProfilePic)="setProfilePic('')"
+                                 (closeDialog)="closeUserProfileDialog()"
+                                 (profilePicUrlEntered)="setProfilePic($event)"
+    ></ac-profile-pic-input-dialog>
+
 
     <div class="chatbox">
       <ac-chatbox (newMessage)="newChatMessage($event)"></ac-chatbox>
     </div>
   </div>
-
-
 </ng-container>
 

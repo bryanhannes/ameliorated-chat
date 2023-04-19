@@ -12,19 +12,59 @@
   }
 
   &__avatar {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 4px;
     margin-right: $spacing-xsmall;
-    background: $orange-200;
-    font-size: 2rem;
-    line-height: 2rem;
+    background: $orange-100;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
 
-  &__content {
-    font-size: 0.9rem;
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    .button-user {
+
+      img {
+        border-radius: 4px;
+        width: 100%;
+        height: 100%;
+      }
+
+      .user-avatar {
+        padding: 0;
+      }
+
+      .image-icon {
+        display: none;
+      }
+
+      &-default {
+
+        img {
+          width: 2rem;
+          height: 2rem;
+        }
+
+        &:hover {
+
+          .user-avatar {
+            display: none;
+          }
+
+          .image-icon {
+            display: inline-block;
+          }
+        }
+      }
+    }
+
+    &__content {
+      font-size: 0.9rem;
+    }
   }
 }
+

@@ -86,6 +86,11 @@ export class ChatObservableState extends ObservableState<ChatState> {
     patchLocalStorage('openApiKey', apiKey);
   }
 
+  public setUserProfilePicUrl(url: string): void {
+    this.patch({ userProfilePicUrl: url });
+    patchLocalStorage('userProfilePicUrl', url);
+  }
+
   public newChat(uuid: string): void {
     const chat: Chat = {
       title: 'New Chat',

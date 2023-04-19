@@ -7,7 +7,7 @@ import {
 import { appRoutes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
-import { ChatTitleStrategy } from '../../../libs/chat/util-config/src/lib/chat-title-strategy.service';
+import { ChatTitleStrategy } from '@ameliorated-chat/chat/util-config';
 
 bootstrapApplication(AppComponent, {
   providers: [

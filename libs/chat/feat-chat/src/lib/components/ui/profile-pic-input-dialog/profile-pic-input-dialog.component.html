@@ -1,0 +1,17 @@
+<ac-dialog (closeDialog)="closeDialog.emit()">
+  <ng-container ac-dialog-header>
+    <h1>Enter your profile picture url</h1>
+  </ng-container>
+  <ng-container ac-dialog-body>
+    <form ngForm (ngSubmit)="submitForm()">
+      <div class="form-control">
+        <input type="text" name="profile-pic" id="profile-pic" class="input__text" [(ngModel)]="userProfilePicUrl"
+               required>
+      </div>
+      <div class="buttons">
+        <button class="button-ok" type="submit">Update profile picture</button>
+        <button class="button-clear" type="button" (click)="clearProfilePic.emit()">Clear profile picture</button>
+      </div>
+    </form>
+  </ng-container>
+</ac-dialog>

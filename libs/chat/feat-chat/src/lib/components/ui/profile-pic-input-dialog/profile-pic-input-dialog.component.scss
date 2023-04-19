@@ -1,0 +1,48 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  min-width: 300px;
+  width: 100%;
+
+  input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 12px 8px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-small;
+}
+
+.button-ok {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  height: 40px;
+  border-radius: 4px;
+  background-color: $orange-400;
+  padding: 0.5rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $orange-200;
+  }
+}
+
+.button-clear {
+  color: $orange-400;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
