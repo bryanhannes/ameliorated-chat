@@ -89,6 +89,10 @@
     "@nrwl/angular:service": {
       "skipTests": true
     },
+    "@nrwl/angular:directive": {
+      "skipTests": true,
+      "standalone": true
+    },
     "@nrwl/nest:service": {
       "flat": true,
       "unitTestRunner": "none"

@@ -148,4 +148,25 @@ export class ChatObservableState extends ObservableState<ChatState> {
   public closeInputApiKeyDialog(): void {
     this.patch({ inputApiKeyDialogVisible: false });
   }
+
+  public updateChatTitle(newTitle: string, chatId: string) {
+    const newChats = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          title: newTitle
+        };
+      } else {
+        return chat;
+      }
+    });
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
+
+  public deleteChat(id: string): void {
+    const newChats = this.snapshot.chats.filter((chat) => chat.id !== id);
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
 }

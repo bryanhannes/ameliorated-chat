@@ -13,6 +13,13 @@
     height: 1.5rem;
   }
 
+  &__title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 200px;
+  }
+
   &__button {
     padding: $spacing-xsmall;
 
