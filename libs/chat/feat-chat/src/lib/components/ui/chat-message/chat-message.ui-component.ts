@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Message, Role } from '@ameliorated-chat/shared/type-chat';
 import { InputState } from '@ameliorated-chat/frontend/util-state';
@@ -6,12 +12,14 @@ import { map, Observable } from 'rxjs';
 
 type ChatMessageInputState = {
   message: Message | null;
+  userProfilePicUrl: string;
 };
 
 type ViewModel = {
   message: string;
   avatarUrl: string;
   isUserMessage: boolean;
+  isDefaultUserIcon: boolean;
 };
 
 @Component({
@@ -26,29 +34,45 @@ export class ChatMessageUiComponent {
   @InputState()
   private readonly inputState$!: Observable<ChatMessageInputState>;
   @Input() public message: Message | null = null;
+  @Input() public userProfilePicUrl = '';
+  @Output() public readonly userProfilePicClicked = new EventEmitter<void>();
 
   public readonly vm$: Observable<ViewModel> = this.inputState$.pipe(
-    map(({ message }) => {
+    map(({ message, userProfilePicUrl }) => {
+      const isUserMessage = message?.role === 'user';
+      const isDefaultUserIcon =
+        !!userProfilePicUrl && userProfilePicUrl.length > 0;
+      const avatarUrl =
+        isDefaultUserIcon && isUserMessage
+          ? userProfilePicUrl
+          : getAvatarUrl(message?.role ?? 'user');
+
       return {
         message: message?.content ?? '',
-        avatarUrl: getAvatar(message?.role ?? 'user'),
-        isUserMessage: message?.role === 'user'
+        avatarUrl: avatarUrl,
+        isUserMessage,
+        isDefaultUserIcon
       };
     })
   );
+
+  public userAvatarClicked(): void {
+    this.userProfilePicClicked.emit();
+  }
 }
 
-function getAvatar(role: Role) {
+// TODO make these URLs configurable
+function getAvatarUrl(role: Role) {
   if (role === 'user') {
-    return '👨';
+    return '/assets/images/avatar/user.svg';
   }
 
   if (role === 'system') {
-    return '⛭';
+    return '/assets/images/avatar/gear.svg';
   }
 
   if (role === 'assistant') {
-    return '🤖';
+    return '/assets/ameliorated-chat-logo.svg';
   }
 
   return '';

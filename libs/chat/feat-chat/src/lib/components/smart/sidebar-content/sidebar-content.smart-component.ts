@@ -76,6 +76,25 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
   public searchTextChanged(searchText: string): void {
     this.patch({ searchText });
   }
+
+  public chatTitleEdited({
+    newTitle,
+    id
+  }: {
+    newTitle: string;
+    id: string;
+  }): void {
+    this.chatObservableState.updateChatTitle(newTitle, id);
+  }
+
+  public chatDeleted(id: string): void {
+    this.chatObservableState.deleteChat(id);
+
+    if (id === this.snapshot.currentChatId) {
+      console.log('navigate to /');
+      this.router.navigate(['..']);
+    }
+  }
 }
 
 const mapToFilteredChats = () =>

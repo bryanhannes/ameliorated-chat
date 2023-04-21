@@ -1,0 +1,61 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+
+.view-mode {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-small;
+  align-items: center;
+
+  &__content {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-medium;
+    padding: 4px;
+  }
+}
+
+
+.edit-mode {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-small;
+  align-items: center;
+
+  textarea {
+    flex: 1;
+    padding: 4px;
+    font-size: 0.8rem;
+    border: 1px solid $gray-300;
+    border-radius: 4px;
+    transition: 0.2s ease-in-out;
+    max-height: 200px;
+
+    &:focus {
+      border: 1px solid $orange-600;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-medium;
+    padding: 4px;
+  }
+}
+
+button {
+  color: $black;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    color: $orange-600;
+  }
+}

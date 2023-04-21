@@ -89,13 +89,9 @@
     "@nrwl/angular:service": {
       "skipTests": true
     },
-    "@nrwl/nest:service": {
-      "flat": true,
-      "unitTestRunner": "none"
-    },
-    "@nrwl/nest:controller": {
-      "flat": true,
-      "unitTestRunner": "none"
+    "@nrwl/angular:directive": {
+      "skipTests": true,
+      "standalone": true
     }
   },
   "defaultProject": "chat"

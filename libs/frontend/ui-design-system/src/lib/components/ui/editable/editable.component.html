@@ -1,0 +1,28 @@
+<ng-container *ngIf="vm$ | async as vm">
+
+
+  <ng-container *ngIf="vm.isEditing; else viewMode">
+    <div class="edit-mode">
+      <textarea [(ngModel)]="value"></textarea>
+      <div class="edit-mode__buttons">
+        <button (click)="saveEdit()">✓</button>
+        <button (click)="cancelEdit()">X</button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #viewMode>
+    <div class="view-mode">
+      <div class="view-mode__content" #contentWrapper [title]="value">
+        <ng-content></ng-content>
+      </div>
+      <div class="view-mode__buttons">
+        <button class="view-mode__button-start" (click)="startEdit()">✏️</button>
+        <button class="view-mode__button-delete" (click)="deleteClicked()">{{ vm.deleteButtonLabel}}️
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+
+</ng-container>

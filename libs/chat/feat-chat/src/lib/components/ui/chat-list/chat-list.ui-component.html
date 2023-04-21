@@ -1,3 +1,13 @@
-<a [routerLink]="[chat.id]" class="chats__item" *ngFor="let chat of chats; trackBy: tracker"
-   [ngClass]="{'chats__item--active': chat.id === currentChatId}"
->{{chat.title}}</a>
+<ng-container *ngIf="chats.length === 0; else chatList">
+  <div class="no-chats">
+    <div>No chats yet 😟</div>
+    <div>Click the "New Chat" button to get started</div>
+  </div>
+</ng-container>
+
+<ng-template #chatList>
+  <a [routerLink]="[chat.id]" class="chats__item" *ngFor="let chat of chats; trackBy: tracker"
+     [ngClass]="{'chats__item--active': chat.id === currentChatId}"
+  ><span acEditable (edited)="onChatTitleEdited($event, chat.id)"
+         (deleted)="onChatDelete(chat.id)">{{chat.title}}</span></a>
+</ng-template>

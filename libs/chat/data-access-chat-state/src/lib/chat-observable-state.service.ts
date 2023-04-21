@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat, Role } from '@ameliorated-chat/shared/type-chat';
+import { Chat, Message, Role } from '@ameliorated-chat/shared/type-chat';
 import {
   getFromLocalStorage,
   patchLocalStorage
@@ -86,6 +86,11 @@ export class ChatObservableState extends ObservableState<ChatState> {
     patchLocalStorage('openApiKey', apiKey);
   }
 
+  public setUserProfilePicUrl(url: string): void {
+    this.patch({ userProfilePicUrl: url });
+    patchLocalStorage('userProfilePicUrl', url);
+  }
+
   public newChat(uuid: string): void {
     const chat: Chat = {
       title: 'New Chat',
@@ -107,38 +112,54 @@ export class ChatObservableState extends ObservableState<ChatState> {
     patchLocalStorage('chats', chats);
   }
 
+  public newChatMessageChunk(chunk: string, currentChatId: string): void {
+    const currentChat: Chat | undefined = this.snapshot.chats.find(
+      (chat: Chat) => chat.id === currentChatId
+    );
+
+    if (!currentChat) return;
+
+    const lastMessage: Message =
+      currentChat.messages[currentChat.messages.length - 1];
+    const isFirstTime: boolean = lastMessage.role === 'user';
+
+    const newMessage: Message = { content: chunk, role: 'assistant' };
+    const messages: Message[] = isFirstTime
+      ? [...currentChat.messages, newMessage]
+      : [
+          ...currentChat.messages.slice(0, -1),
+          { ...lastMessage, ...newMessage }
+        ];
+
+    const newChat: Chat = { ...currentChat, messages };
+    const newChats: Chat[] = this.snapshot.chats.map((chat: Chat) =>
+      chat.id === currentChatId ? newChat : chat
+    );
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
+
   public newChatMessage(
     message: string,
     currentChatId: string,
     role: Role = 'user'
   ): void {
-    const currentChat = this.snapshot.chats.find(
-      (chat) => chat.id === currentChatId
+    const currentChat: Chat | undefined = this.snapshot.chats.find(
+      (chat: Chat) => chat.id === currentChatId
     );
 
-    if (currentChat) {
-      const newChat: Chat = {
-        ...currentChat,
-        messages: [
-          ...currentChat.messages,
-          {
-            content: message,
-            role: role
-          }
-        ]
-      };
+    if (!currentChat) return;
 
-      const newChats: Chat[] = this.snapshot.chats.map((chat) => {
-        if (chat.id === currentChatId) {
-          return newChat;
-        } else {
-          return chat;
-        }
-      });
+    const newMessage: Message = { content: message, role };
+    const messages: Message[] = [...currentChat.messages, newMessage];
+    const newChat: Chat = { ...currentChat, messages };
+    const newChats: Chat[] = this.snapshot.chats.map((chat: Chat) =>
+      chat.id === currentChatId ? newChat : chat
+    );
 
-      this.patch({ chats: newChats });
-      patchLocalStorage('chats', newChats);
-    }
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
   }
 
   public openInputApiKeyDialog(): void {
@@ -147,5 +168,25 @@ export class ChatObservableState extends ObservableState<ChatState> {
 
   public closeInputApiKeyDialog(): void {
     this.patch({ inputApiKeyDialogVisible: false });
+  }
+
+  public updateChatTitle(newTitle: string, chatId: string) {
+    const newChats = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          title: newTitle
+        };
+      }
+      return chat;
+    });
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
+
+  public deleteChat(id: string): void {
+    const newChats = this.snapshot.chats.filter((chat) => chat.id !== id);
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
   }
 }

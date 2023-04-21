@@ -9,12 +9,15 @@ import { map, Observable, pipe } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-component';
 import { ApiKeyInputDialogComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.component';
+import { ProfilePicInputDialogComponent } from '../../ui/profile-pic-input-dialog/profile-pic-input-dialog.component';
 
 type ViewModel = {
   chat: Chat | null;
   inputApiKeyDialogVisible: boolean;
+  userProfilePicDialogVisible: boolean;
   showInputApiKey: boolean;
   openAIApiKey: string;
+  userProfilePicUrl: string;
 };
 
 type State = {
@@ -22,7 +25,9 @@ type State = {
   chats: Chat[];
   currentChatId: string;
   inputApiKeyDialogVisible: boolean;
+  userProfilePicDialogVisible: boolean;
   openAIApiKey: string;
+  userProfilePicUrl: string;
 };
 
 @Component({
@@ -33,7 +38,8 @@ type State = {
     ChatboxUiComponent,
     AppInfoUiComponent,
     ChatMessageUiComponent,
-    ApiKeyInputDialogComponent
+    ApiKeyInputDialogComponent,
+    ProfilePicInputDialogComponent
   ],
   templateUrl: './chat.smart-component.html',
   styleUrls: ['./chat.smart-component.scss']
@@ -47,14 +53,26 @@ export class ChatSmartComponent extends ObservableState<State> {
   public readonly vm$: Observable<ViewModel> = this.onlySelectWhen([
     'chat',
     'inputApiKeyDialogVisible',
-    'openAIApiKey'
+    'userProfilePicDialogVisible',
+    'openAIApiKey',
+    'userProfilePicUrl'
   ]).pipe(
-    map(({ chat, inputApiKeyDialogVisible, openAIApiKey }) => ({
-      chat,
-      inputApiKeyDialogVisible,
-      showInputApiKey: openAIApiKey.length === 0,
-      openAIApiKey
-    }))
+    map(
+      ({
+        chat,
+        inputApiKeyDialogVisible,
+        openAIApiKey,
+        userProfilePicUrl,
+        userProfilePicDialogVisible
+      }) => ({
+        chat,
+        inputApiKeyDialogVisible,
+        showInputApiKey: openAIApiKey.length === 0,
+        openAIApiKey,
+        userProfilePicUrl,
+        userProfilePicDialogVisible
+      })
+    )
   );
 
   public readonly tracker = (i: number) => i;
@@ -66,7 +84,9 @@ export class ChatSmartComponent extends ObservableState<State> {
       chats: [],
       currentChatId: this.activatedRoute.snapshot.params['id'],
       inputApiKeyDialogVisible: false,
-      openAIApiKey: this.chatObservableState.snapshot.openAIApiKey
+      userProfilePicDialogVisible: false,
+      openAIApiKey: this.chatObservableState.snapshot.openAIApiKey,
+      userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl
     });
 
     const currentChatId$ = this.activatedRoute.params.pipe(
@@ -77,7 +97,8 @@ export class ChatSmartComponent extends ObservableState<State> {
       ...this.chatObservableState.pick([
         'chats',
         'openAIApiKey',
-        'inputApiKeyDialogVisible'
+        'inputApiKeyDialogVisible',
+        'userProfilePicUrl'
       ]),
       currentChatId: currentChatId$,
       chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
@@ -101,13 +122,15 @@ export class ChatSmartComponent extends ObservableState<State> {
       )?.messages || [];
 
     if (messages.length > 0) {
-      this.facade.newChatMessage(messages).subscribe((answer) => {
-        this.chatObservableState.newChatMessage(
-          answer,
-          this.snapshot.currentChatId,
-          'assistant'
-        );
-        this.viewportScroller.scrollToPosition([0, 9999999]);
+      this.facade.newChatMessage(messages).subscribe({
+        next: (chunk) => {
+          this.chatObservableState.newChatMessageChunk(
+            chunk,
+            this.snapshot.currentChatId
+          );
+          this.viewportScroller.scrollToPosition([0, 9999999]);
+        },
+        error: (error) => console.error(error)
       });
     }
   }
@@ -123,6 +146,19 @@ export class ChatSmartComponent extends ObservableState<State> {
   public setApiKey(apiKey: string): void {
     this.chatObservableState.setOpenApiKey(apiKey);
     this.closeInputApiKeyDialog();
+  }
+
+  public openUserProfileDialog(): void {
+    this.patch({ userProfilePicDialogVisible: true });
+  }
+
+  public closeUserProfileDialog(): void {
+    this.patch({ userProfilePicDialogVisible: false });
+  }
+
+  public setProfilePic(url: string): void {
+    this.chatObservableState.setUserProfilePicUrl(url);
+    this.closeUserProfileDialog();
   }
 }
 
