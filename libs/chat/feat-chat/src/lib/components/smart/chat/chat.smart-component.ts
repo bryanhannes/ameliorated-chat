@@ -122,13 +122,15 @@ export class ChatSmartComponent extends ObservableState<State> {
       )?.messages || [];
 
     if (messages.length > 0) {
-      this.facade.newChatMessage(messages).subscribe((answer) => {
-        this.chatObservableState.newChatMessage(
-          answer,
-          this.snapshot.currentChatId,
-          'assistant'
-        );
-        this.viewportScroller.scrollToPosition([0, 9999999]);
+      this.facade.newChatMessage(messages).subscribe({
+        next: (chunk) => {
+          this.chatObservableState.newChatMessageChunk(
+            chunk,
+            this.snapshot.currentChatId
+          );
+          this.viewportScroller.scrollToPosition([0, 9999999]);
+        },
+        error: (error) => console.error(error)
       });
     }
   }

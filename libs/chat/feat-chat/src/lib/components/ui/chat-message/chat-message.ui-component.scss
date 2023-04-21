@@ -61,10 +61,11 @@
         }
       }
     }
+  }
 
-    &__content {
-      font-size: 0.9rem;
-    }
+  &__content {
+    font-size: 0.9rem;
+    flex: 1;
   }
 }
 
