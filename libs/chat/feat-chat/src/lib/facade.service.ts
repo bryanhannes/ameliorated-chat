@@ -15,4 +15,11 @@ export class FacadeService {
   public newChatMessage(messages: Message[]): Observable<string> {
     return this.chatService.newChatMessage(messages);
   }
+
+  public generateTitleForChat(
+    userMessage: string,
+    assistantMessage: string
+  ): Observable<string> {
+    return this.chatService.generateTitleForChat(userMessage, assistantMessage);
+  }
 }
