@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat, Message, Role } from '@ameliorated-chat/shared/type-chat';
+import { Chat, Message, Role } from '@ameliorated-chat/chat/type-chat';
 import {
   getFromLocalStorage,
   patchLocalStorage

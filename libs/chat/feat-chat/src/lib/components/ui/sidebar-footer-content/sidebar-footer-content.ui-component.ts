@@ -15,11 +15,11 @@ type PageViewModel = {
   selector: 'ac-sidebar-footer-content',
   standalone: true,
   imports: [CommonModule, GithubIconUiComponent, TwitterIconUiComponent],
-  templateUrl: './sidebar-footer-content.component.html',
-  styleUrls: ['./sidebar-footer-content.component.scss'],
+  templateUrl: './sidebar-footer-content.ui-component.html',
+  styleUrls: ['./sidebar-footer-content.ui-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarFooterContentComponent {
+export class SidebarFooterContentUiComponent {
   private readonly facade = inject(FacadeService);
   private readonly chatObservableState = this.facade.chatObservableState;
 

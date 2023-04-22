@@ -13,11 +13,11 @@ import { FormsModule } from '@angular/forms';
   selector: 'ac-api-key-input-dialog',
   standalone: true,
   imports: [CommonModule, DialogUiComponent, FormsModule],
-  templateUrl: './api-key-input-dialog.component.html',
-  styleUrls: ['./api-key-input-dialog.component.scss'],
+  templateUrl: './api-key-input-dialog.ui-component.html',
+  styleUrls: ['./api-key-input-dialog.ui-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ApiKeyInputDialogComponent {
+export class ApiKeyInputDialogUiComponent {
   @Input() public apiKey = '';
   @Output() public readonly apiKeyEntered = new EventEmitter<string>();
   @Output() public readonly closeDialog = new EventEmitter<void>();

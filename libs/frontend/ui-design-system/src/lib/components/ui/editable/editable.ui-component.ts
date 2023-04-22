@@ -26,10 +26,10 @@ type State = {
   selector: '[acEditable]',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './editable.component.html',
-  styleUrls: ['./editable.component.scss']
+  templateUrl: './editable.ui-component.html',
+  styleUrls: ['./editable.ui-component.scss']
 })
-export class EditableComponent extends ObservableState<State> {
+export class EditableUiComponent extends ObservableState<State> {
   @Output() public readonly edited = new EventEmitter<string>();
   @Output() public readonly deleted = new EventEmitter();
   public value = '';

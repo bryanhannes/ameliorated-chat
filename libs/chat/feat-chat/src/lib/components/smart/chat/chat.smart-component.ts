@@ -3,13 +3,14 @@ import { CommonModule, ViewportScroller } from '@angular/common';
 import { ChatboxUiComponent } from '../../ui/chatbox/chatbox.ui-component';
 import { AppInfoUiComponent } from '../../ui/app-info/app-info.ui-component';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat, Message } from '@ameliorated-chat/shared/type-chat';
+import { Chat, Message } from '@ameliorated-chat/chat/type-chat';
 import { FacadeService } from '../../../facade.service';
 import { map, Observable, pipe } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-component';
-import { ApiKeyInputDialogComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.component';
-import { ProfilePicInputDialogComponent } from '../../ui/profile-pic-input-dialog/profile-pic-input-dialog.component';
+import { ApiKeyInputDialogUiComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.ui-component';
+import { ProfilePicInputDialogUiComponent } from '../../ui/profile-pic-input-dialog/profile-pic-input-dialog.ui-component';
+import { generateUUID } from '@ameliorated-chat/frontend/util-uuid';
 
 type ViewModel = {
   chat: Chat | null;
@@ -38,13 +39,14 @@ type State = {
     ChatboxUiComponent,
     AppInfoUiComponent,
     ChatMessageUiComponent,
-    ApiKeyInputDialogComponent,
-    ProfilePicInputDialogComponent
+    ApiKeyInputDialogUiComponent,
+    ProfilePicInputDialogUiComponent
   ],
   templateUrl: './chat.smart-component.html',
   styleUrls: ['./chat.smart-component.scss']
 })
 export class ChatSmartComponent extends ObservableState<State> {
+  private readonly router = inject(Router);
   private readonly facade = inject(FacadeService);
   private readonly chatObservableState = this.facade.chatObservableState;
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -111,6 +113,17 @@ export class ChatSmartComponent extends ObservableState<State> {
       return;
     }
 
+    if (!this.snapshot.currentChatId) {
+      const uuid = generateUUID();
+      this.chatObservableState.newChat(uuid);
+      this.patch({ currentChatId: uuid });
+      this.router.navigate([uuid]).then(() => this.addNewChatMessage(message));
+    } else {
+      this.addNewChatMessage(message);
+    }
+  }
+
+  public addNewChatMessage(message: string): void {
     this.chatObservableState.newChatMessage(
       message,
       this.snapshot.currentChatId

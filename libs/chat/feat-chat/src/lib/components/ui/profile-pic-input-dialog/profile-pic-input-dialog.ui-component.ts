@@ -13,11 +13,11 @@ import { FormsModule } from '@angular/forms';
   selector: 'ac-profile-pic-input-dialog',
   standalone: true,
   imports: [CommonModule, DialogUiComponent, FormsModule],
-  templateUrl: './profile-pic-input-dialog.component.html',
-  styleUrls: ['./profile-pic-input-dialog.component.scss'],
+  templateUrl: './profile-pic-input-dialog.ui-component.html',
+  styleUrls: ['./profile-pic-input-dialog.ui-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfilePicInputDialogComponent {
+export class ProfilePicInputDialogUiComponent {
   @Input() public userProfilePicUrl = '';
   @Output() public readonly profilePicUrlEntered = new EventEmitter<string>();
   @Output() public readonly clearProfilePic = new EventEmitter();
