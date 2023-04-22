@@ -112,6 +112,22 @@ export class ChatObservableState extends ObservableState<ChatState> {
     patchLocalStorage('chats', chats);
   }
 
+  public newChatTitleChunk(chunk: string, currentChatId: string): void {
+    const currentChat: Chat | undefined = this.snapshot.chats.find(
+      (chat: Chat) => chat.id === currentChatId
+    );
+
+    if (!currentChat) return;
+
+    const newChat: Chat = { ...currentChat, title: chunk };
+    const newChats: Chat[] = this.snapshot.chats.map((chat: Chat) =>
+      chat.id === currentChatId ? newChat : chat
+    );
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
+
   public newChatMessageChunk(chunk: string, currentChatId: string): void {
     const currentChat: Chat | undefined = this.snapshot.chats.find(
       (chat: Chat) => chat.id === currentChatId
@@ -171,7 +187,7 @@ export class ChatObservableState extends ObservableState<ChatState> {
   }
 
   public updateChatTitle(newTitle: string, chatId: string) {
-    const newChats = this.snapshot.chats.map((chat) => {
+    const newChats: Chat[] = this.snapshot.chats.map((chat) => {
       if (chat.id === chatId) {
         return {
           ...chat,
@@ -180,6 +196,7 @@ export class ChatObservableState extends ObservableState<ChatState> {
       }
       return chat;
     });
+
     this.patch({ chats: newChats });
     patchLocalStorage('chats', newChats);
   }

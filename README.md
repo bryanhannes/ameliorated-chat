@@ -24,6 +24,7 @@ If you have any suggestions, please open an issue or make a contribution.
 - [x] As a user I should be able to update my profile picture
 - [x] Streaming the chat response
 - [x] Deploy somewhere
+- [x] A title should be automatically generated when creating a new chat
 
 - ## Planned features/technical improvements
 
@@ -33,7 +34,6 @@ If you have any suggestions, please open an issue or make a contribution.
 - [ ] As a user I should be able to select the temperature
 - [ ] As a user I should be able to choose between a list of default messages
 - [ ] As a user I should be able to toggle between light and dark mode
-- [ ] A title should be automatically generated when creating a new chat
 - [ ] Nice loading animations
 - [ ] As a user I should be able to select a prompt from a prompt library
 

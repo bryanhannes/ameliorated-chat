@@ -143,8 +143,37 @@ export class ChatSmartComponent extends ObservableState<State> {
           );
           this.viewportScroller.scrollToPosition([0, 9999999]);
         },
-        error: (error) => console.error(error)
+        error: (error) => console.error(error),
+        complete: () => this.generateTitleForNewChat(message)
       });
+    }
+  }
+
+  private generateTitleForNewChat(message: string) {
+    const messagesOfCurrentChat = this.chatObservableState.snapshot.chats.find(
+      (chat) => chat.id === this.snapshot.currentChatId
+    )?.messages;
+
+    // First call has a message size of 3: 1 system message, 1 user message and 1 assistant message
+    if (messagesOfCurrentChat && messagesOfCurrentChat.length === 3) {
+      const userMessage = message;
+      const assistantMessage = this.chatObservableState.snapshot.chats
+        .find((chat) => chat.id === this.snapshot.currentChatId)
+        ?.messages.slice(-1)[0].content;
+
+      if (!assistantMessage) return;
+
+      this.facade
+        .generateTitleForChat(userMessage, assistantMessage)
+        .subscribe({
+          next: (chunk) => {
+            this.chatObservableState.newChatTitleChunk(
+              chunk,
+              this.snapshot.currentChatId
+            );
+          },
+          error: (error) => console.error(error)
+        });
     }
   }
 
