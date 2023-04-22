@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { ChatObservableState } from '@ameliorated-chat/chat/data-access-chat-state';
 import { Title } from '@angular/platform-browser';
-import { Chat } from '@ameliorated-chat/shared/type-chat';
+import { Chat } from '@ameliorated-chat/chat/type-chat';
 
 @Injectable()
 export class ChatTitleStrategy extends TitleStrategy {

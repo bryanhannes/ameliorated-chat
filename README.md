@@ -22,7 +22,7 @@ If you have any suggestions, please open an issue or make a contribution.
 - [x] As a user I should be able to start a new chat
 - [x] As a user I should be able to update the title of a chat
 - [x] As a user I should be able to update my profile picture
-- [x] Streaming the chat response - TODO make this code a bit cleanrer
+- [x] Streaming the chat response
 - [x] Deploy somewhere
 
 - ## Planned features/technical improvements

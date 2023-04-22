@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ChatObservableState } from '@ameliorated-chat/chat/data-access-chat-state';
-import { Message } from '@ameliorated-chat/shared/type-chat';
+import { Message } from '@ameliorated-chat/chat/type-chat';
 import { Observable } from 'rxjs';
 import { ChatService } from '@ameliorated-chat/chat/data-access-chat';
 

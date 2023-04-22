@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Message } from '@ameliorated-chat/shared/type-chat';
+import { Message } from '@ameliorated-chat/chat/type-chat';
 import { Observable } from 'rxjs';
 import { getFromLocalStorage } from '@ameliorated-chat/frontend/util-local-storage';
 
@@ -23,7 +23,6 @@ export class ChatService {
           .filter(Boolean);
 
         const newUpdatesParsed: string[] = newUpdates.map((update) => {
-          console.log(update);
           const parsed = JSON.parse(update);
           return parsed.choices[0].delta?.content || '';
         });
@@ -34,10 +33,8 @@ export class ChatService {
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
-            console.log('Request completed');
             observer.complete();
           } else {
-            console.log('Request errored');
             observer.error(
               new Error('Request failed with status ' + xhr.status)
             );

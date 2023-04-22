@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat } from '@ameliorated-chat/shared/type-chat';
+import { Chat } from '@ameliorated-chat/chat/type-chat';
 import { FacadeService } from '../../../facade.service';
 import { debounceTime, map, Observable, pipe } from 'rxjs';
 import { FormsModule } from '@angular/forms';

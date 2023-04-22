@@ -7,15 +7,15 @@ import {
   TrackByFunction
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chat } from '@ameliorated-chat/shared/type-chat';
+import { Chat } from '@ameliorated-chat/chat/type-chat';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { EditableComponent } from '@ameliorated-chat/frontend/ui-design-system';
+import { EditableUiComponent } from '@ameliorated-chat/frontend/ui-design-system';
 
 @Component({
   selector: 'ac-chat-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, EditableComponent],
+  imports: [CommonModule, RouterLink, FormsModule, EditableUiComponent],
   templateUrl: './chat-list.ui-component.html',
   styleUrls: ['./chat-list.ui-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
