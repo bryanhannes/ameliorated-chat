@@ -26,9 +26,6 @@
         "libs/chat/feat-shell/src/index.ts"
       ],
       "@ameliorated-chat/chat/type-chat": ["libs/chat/type-chat/src/index.ts"],
-      "@ameliorated-chat/chat/util-config": [
-        "libs/chat/util-config/src/index.ts"
-      ],
       "@ameliorated-chat/frontend/ui-design-system": [
         "libs/frontend/ui-design-system/src/index.ts"
       ],

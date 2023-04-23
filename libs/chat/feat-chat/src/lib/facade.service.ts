@@ -9,7 +9,6 @@ import { ChatService } from '@ameliorated-chat/chat/data-access-chat';
 })
 export class FacadeService {
   public readonly chatObservableState = inject(ChatObservableState);
-
   private readonly chatService = inject(ChatService);
 
   public newChatMessage(messages: Message[]): Observable<string> {

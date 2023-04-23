@@ -11,6 +11,7 @@ import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-co
 import { ApiKeyInputDialogUiComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.ui-component';
 import { ProfilePicInputDialogUiComponent } from '../../ui/profile-pic-input-dialog/profile-pic-input-dialog.ui-component';
 import { generateUUID } from '@ameliorated-chat/frontend/util-uuid';
+import { getCurrentId } from '../../../utils/current-id.util';
 
 type ViewModel = {
   chat: Chat | null;
@@ -91,9 +92,7 @@ export class ChatSmartComponent extends ObservableState<State> {
       userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl
     });
 
-    const currentChatId$ = this.activatedRoute.params.pipe(
-      map((params) => params['id'])
-    );
+    const currentChatId$ = getCurrentId(this.router, this.activatedRoute);
 
     this.connect({
       ...this.chatObservableState.pick([
@@ -167,6 +166,7 @@ export class ChatSmartComponent extends ObservableState<State> {
         .generateTitleForChat(userMessage, assistantMessage)
         .subscribe({
           next: (chunk) => {
+            console.log(chunk);
             this.chatObservableState.newChatTitleChunk(
               chunk,
               this.snapshot.currentChatId

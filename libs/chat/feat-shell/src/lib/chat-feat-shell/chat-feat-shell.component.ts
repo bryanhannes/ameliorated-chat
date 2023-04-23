@@ -4,13 +4,16 @@ import {
   HeaderUiComponent,
   SidebarUiComponent
 } from '@ameliorated-chat/frontend/ui-design-system';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { FacadeService } from '../facade.service';
 import { map, Observable } from 'rxjs';
-import { SidebarContentSmartComponent } from '@ameliorated-chat/chat/feat-chat';
+import {
+  SidebarContentSmartComponent,
+  SidebarFooterContentUiComponent
+} from '@ameliorated-chat/chat/feat-chat';
 import { Chat } from '@ameliorated-chat/chat/type-chat';
-import { SidebarFooterContentUiComponent } from '../../../../feat-chat/src/lib/components/ui/sidebar-footer-content/sidebar-footer-content.ui-component';
+import { getCurrentId } from '../../../../feat-chat/src/lib/utils/current-id.util';
 
 type PageViewModel = {
   sidebarOpen: boolean;
@@ -20,7 +23,7 @@ type PageViewModel = {
 type State = {
   sidebarOpen: boolean;
   currentChat: Chat | null;
-  currentChatId: string;
+  currentChatId: string | null;
   chats: Chat[];
 };
 
@@ -40,16 +43,19 @@ type State = {
 })
 export class ChatFeatShellComponent extends ObservableState<State> {
   private readonly facade = inject(FacadeService);
+  private readonly router = inject(Router);
   private readonly chatObservableState = this.facade.chatObservableState;
   private readonly activatedRoute = inject(ActivatedRoute);
 
   public readonly vm$: Observable<PageViewModel> = this.onlySelectWhen([
     'sidebarOpen',
-    'currentChat'
+    'currentChat',
+    'currentChatId',
+    'chats'
   ]).pipe(
     map(({ sidebarOpen, currentChat }) => ({
       sidebarOpen,
-      currentChatTitle: currentChat?.title || ''
+      currentChatTitle: currentChat ? currentChat?.title : ''
     }))
   );
 
@@ -57,19 +63,17 @@ export class ChatFeatShellComponent extends ObservableState<State> {
     super();
     this.initialize({
       sidebarOpen: true,
-      currentChatId: this.activatedRoute.snapshot.params['id'],
+      currentChatId: null,
       currentChat: null,
       chats: []
     });
 
-    const currentChatId$ = this.activatedRoute.firstChild?.params.pipe(
-      map((params) => params['id'])
-    );
-
+    const currentChatId$ = getCurrentId(this.router, this.activatedRoute);
     const currentChat$ = this.onlySelectWhen(['currentChatId', 'chats']).pipe(
-      map(({ currentChatId, chats }) => {
-        return chats.find((chat) => chat.id === currentChatId) || null;
-      })
+      map(
+        ({ currentChatId, chats }) =>
+          chats.find((chat) => chat.id === currentChatId) || null
+      )
     );
 
     this.connect({

@@ -76,11 +76,12 @@ export class ChatService {
       },
       {
         content:
-          'What would be a short and relevant title for this chat? You must strictly answer with only the title, no other text is allowed.',
+          'What would be a short and relevant title for this chat? You must strictly answer with only the title, no other text is allowed, not even quotes.',
         role: 'user'
       }
     ];
 
+    // TODO optimize this so no duplicate code
     return new Observable((observer) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url);

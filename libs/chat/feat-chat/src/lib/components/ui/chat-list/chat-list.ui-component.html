@@ -8,6 +8,7 @@
 <ng-template #chatList>
   <a [routerLink]="[chat.id]" class="chats__item" *ngFor="let chat of chats; trackBy: tracker"
      [ngClass]="{'chats__item--active': chat.id === currentChatId}"
-  ><span acEditable (edited)="onChatTitleEdited($event, chat.id)"
-         (deleted)="onChatDelete(chat.id)">{{chat.title}}</span></a>
+  >
+    <span acEditable (edited)="onChatTitleEdited($event, chat.id)"
+          (deleted)="onChatDelete(chat.id)">{{chat.title}}</span></a>
 </ng-template>
