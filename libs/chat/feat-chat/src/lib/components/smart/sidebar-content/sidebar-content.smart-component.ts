@@ -7,7 +7,8 @@ import { debounceTime, map, Observable, pipe } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ChatListUiComponent } from '../../ui/chat-list/chat-list.ui-component';
 import { generateUUID } from '@ameliorated-chat/frontend/util-uuid';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { getCurrentId } from '../../../utils/current-id.util';
 
 type PageViewModel = {
   currentChatId: string | null;
@@ -19,13 +20,13 @@ type State = {
   chats: Chat[];
   searchText: string;
   filteredChats: Chat[];
-  currentChatId: string;
+  currentChatId: string | null;
 };
 
 @Component({
   selector: 'ac-sidebar-content',
   standalone: true,
-  imports: [CommonModule, FormsModule, ChatListUiComponent],
+  imports: [CommonModule, FormsModule, ChatListUiComponent, RouterModule],
   templateUrl: './sidebar-content.smart-component.html',
   styleUrls: ['./sidebar-content.smart-component.scss']
 })
@@ -35,7 +36,11 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
 
-  public readonly vm$: Observable<PageViewModel> = this.state$.pipe(
+  public readonly vm$: Observable<PageViewModel> = this.onlySelectWhen([
+    'filteredChats',
+    'searchText',
+    'currentChatId'
+  ]).pipe(
     map(({ filteredChats, searchText, currentChatId }) => ({
       filteredChats,
       searchText,
@@ -49,21 +54,20 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
       chats: [],
       filteredChats: [],
       searchText: '',
-      currentChatId: this.activatedRoute.snapshot.params['id']
+      currentChatId: null
     });
+
+    const currentChatId$ = getCurrentId(this.router, this.activatedRoute);
 
     const filteredChats$ = this.onlySelectWhen(['chats', 'searchText']).pipe(
       debounceTime(500),
       mapToFilteredChats()
     );
-    const currentChatId$ = this.activatedRoute.firstChild?.params.pipe(
-      map((params) => params['id'])
-    );
 
     this.connect({
       ...this.chatObservableState.pick(['chats']),
-      filteredChats: filteredChats$,
-      currentChatId: currentChatId$
+      currentChatId: currentChatId$,
+      filteredChats: filteredChats$
     });
   }
 
@@ -90,9 +94,8 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
   public chatDeleted(id: string): void {
     this.chatObservableState.deleteChat(id);
 
-    if (id === this.snapshot.currentChatId) {
-      console.log('navigate to /');
-      this.router.navigate(['..']);
+    if (this.snapshot.currentChatId === id) {
+      this.router.navigateByUrl('/');
     }
   }
 }

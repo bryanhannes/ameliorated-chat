@@ -202,7 +202,9 @@ export class ChatObservableState extends ObservableState<ChatState> {
   }
 
   public deleteChat(id: string): void {
-    const newChats = this.snapshot.chats.filter((chat) => chat.id !== id);
+    const newChats: Chat[] = this.snapshot.chats.filter(
+      (chat) => chat.id !== id
+    );
     this.patch({ chats: newChats });
     patchLocalStorage('chats', newChats);
   }
