@@ -35,6 +35,10 @@
     flex: 1;
     transition: all 0.3s ease-in-out;
 
+    main {
+      padding-top: 50px;
+    }
+
     @media (min-width: $breakpoint-md) {
       &-open {
         padding-left: 300px;

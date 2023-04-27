@@ -2,9 +2,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   Output
-} from '@angular/core'
-import { CommonModule } from '@angular/common'
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { InputState } from '@ameliorated-chat/frontend/util-state';
+import { map, Observable } from 'rxjs';
+
+type HeaderInputState = {
+  sidebarOpen: boolean;
+};
 
 @Component({
   selector: 'ac-header',
@@ -15,14 +22,22 @@ import { CommonModule } from '@angular/common'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderUiComponent {
-  @Output() public openHamburgerMenu = new EventEmitter<void>()
-  @Output() public openSettingsMenu = new EventEmitter<void>()
+  @InputState() public readonly inputState!: Observable<HeaderInputState>;
+  @Input() public sidebarOpen = true;
+  @Output() public openHamburgerMenu = new EventEmitter<void>();
+  @Output() public openSettingsMenu = new EventEmitter<void>();
+
+  public readonly vm$ = this.inputState.pipe(
+    map(({ sidebarOpen }) => ({
+      sidebarOpen
+    }))
+  );
 
   public onOpenHamburgerMenu(): void {
-    this.openHamburgerMenu.emit()
+    this.openHamburgerMenu.emit();
   }
 
   public onOpenSettingsMenu(): void {
-    this.openSettingsMenu.emit()
+    this.openSettingsMenu.emit();
   }
 }

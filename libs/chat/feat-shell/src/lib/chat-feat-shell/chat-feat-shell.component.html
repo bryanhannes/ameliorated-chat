@@ -14,7 +14,8 @@
     <button (click)="closeHamburgerMenu()" class="overlay" [ngClass]="{ 'overlay-visible': !vm.sidebarOpen }"></button>
 
     <div class="page__body" [ngClass]="{ 'page__body-open': vm.sidebarOpen }">
-      <ac-header (openHamburgerMenu)="openHamburgerMenu()" (openSettingsMenu)="openSettingsMenu()">
+      <ac-header [sidebarOpen]="vm.sidebarOpen" (openHamburgerMenu)="openHamburgerMenu()"
+                 (openSettingsMenu)="openSettingsMenu()">
         {{vm.currentChatTitle}}
       </ac-header>
       <main>

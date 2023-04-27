@@ -7,6 +7,15 @@
   align-items: center;
   padding: 4px $spacing-small;
   box-shadow: 0 0.125rem 0.25rem $gray-400;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  transition: width 0.3s ease-in-out;
+  background: $white;
+
+  &-sidebar-open {
+    width: calc(100% - 300px);
+  }
 
   svg {
     width: 1.5rem;
