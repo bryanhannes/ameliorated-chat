@@ -10,7 +10,7 @@ export type ChatState = {
   sidebarOpen: boolean;
   openAIApiKey: string;
   chats: Chat[];
-  useEnterToSend: boolean; // Still need to implement this;
+  sendOnEnter: boolean;
   userProfilePicUrl: string;
   inputApiKeyDialogVisible: boolean;
 };
@@ -66,10 +66,10 @@ export class ChatObservableState extends ObservableState<ChatState> {
   constructor() {
     super();
     this.initialize({
-      sidebarOpen: getFromLocalStorage('sidebarOpen', false),
+      sidebarOpen: getFromLocalStorage('sidebarOpen', true),
       openAIApiKey: getFromLocalStorage('openApiKey', ''),
       chats: getFromLocalStorage('chats', mockChats),
-      useEnterToSend: getFromLocalStorage('useEnterToSend', false),
+      sendOnEnter: getFromLocalStorage('sendOnEnter', false),
       userProfilePicUrl: getFromLocalStorage('userProfilePicUrl', ''),
       inputApiKeyDialogVisible: false
     });
@@ -207,5 +207,10 @@ export class ChatObservableState extends ObservableState<ChatState> {
     );
     this.patch({ chats: newChats });
     patchLocalStorage('chats', newChats);
+  }
+
+  public toggleSendOnEnter(): void {
+    this.patch({ sendOnEnter: !this.snapshot.sendOnEnter });
+    patchLocalStorage('sendOnEnter', this.snapshot.sendOnEnter);
   }
 }

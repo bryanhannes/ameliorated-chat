@@ -20,6 +20,8 @@ type ViewModel = {
   showInputApiKey: boolean;
   openAIApiKey: string;
   userProfilePicUrl: string;
+  sendOnEnter: boolean;
+  sidebarOpen: boolean;
 };
 
 type State = {
@@ -30,6 +32,8 @@ type State = {
   userProfilePicDialogVisible: boolean;
   openAIApiKey: string;
   userProfilePicUrl: string;
+  sendOnEnter: boolean;
+  sidebarOpen: boolean;
 };
 
 @Component({
@@ -58,7 +62,9 @@ export class ChatSmartComponent extends ObservableState<State> {
     'inputApiKeyDialogVisible',
     'userProfilePicDialogVisible',
     'openAIApiKey',
-    'userProfilePicUrl'
+    'userProfilePicUrl',
+    'sendOnEnter',
+    'sidebarOpen'
   ]).pipe(
     map(
       ({
@@ -66,14 +72,18 @@ export class ChatSmartComponent extends ObservableState<State> {
         inputApiKeyDialogVisible,
         openAIApiKey,
         userProfilePicUrl,
-        userProfilePicDialogVisible
+        userProfilePicDialogVisible,
+        sendOnEnter,
+        sidebarOpen
       }) => ({
         chat,
         inputApiKeyDialogVisible,
         showInputApiKey: openAIApiKey.length === 0,
         openAIApiKey,
         userProfilePicUrl,
-        userProfilePicDialogVisible
+        userProfilePicDialogVisible,
+        sendOnEnter,
+        sidebarOpen
       })
     )
   );
@@ -89,7 +99,9 @@ export class ChatSmartComponent extends ObservableState<State> {
       inputApiKeyDialogVisible: false,
       userProfilePicDialogVisible: false,
       openAIApiKey: this.chatObservableState.snapshot.openAIApiKey,
-      userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl
+      userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl,
+      sendOnEnter: this.chatObservableState.snapshot.sendOnEnter,
+      sidebarOpen: this.chatObservableState.snapshot.sidebarOpen
     });
 
     const currentChatId$ = getCurrentId(this.router, this.activatedRoute);
@@ -99,7 +111,9 @@ export class ChatSmartComponent extends ObservableState<State> {
         'chats',
         'openAIApiKey',
         'inputApiKeyDialogVisible',
-        'userProfilePicUrl'
+        'userProfilePicUrl',
+        'sendOnEnter',
+        'sidebarOpen'
       ]),
       currentChatId: currentChatId$,
       chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
@@ -201,6 +215,10 @@ export class ChatSmartComponent extends ObservableState<State> {
   public setProfilePic(url: string): void {
     this.chatObservableState.setUserProfilePicUrl(url);
     this.closeUserProfileDialog();
+  }
+
+  public toggleSendOnEnter(): void {
+    this.chatObservableState.toggleSendOnEnter();
   }
 }
 

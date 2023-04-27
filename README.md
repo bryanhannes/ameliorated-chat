@@ -25,10 +25,10 @@ If you have any suggestions, please open an issue or make a contribution.
 - [x] Streaming the chat response
 - [x] Deploy somewhere
 - [x] A title should be automatically generated when creating a new chat
+- [x] As a user I should be able to send a new message by pressing enter or clicking a send button
+
 
 - ## Planned features/technical improvements
-
-- [ ] As a user I should be able to send a new message by pressing enter of clicking a send button
 - [ ] As a user I should be able to group chats in a folder
 - [ ] As a user I should be able to select the model
 - [ ] As a user I should be able to select the temperature
@@ -36,6 +36,8 @@ If you have any suggestions, please open an issue or make a contribution.
 - [ ] As a user I should be able to toggle between light and dark mode
 - [ ] Nice loading animations
 - [ ] As a user I should be able to select a prompt from a prompt library
+- [ ] Responses should have some markup (e.g. bold, italic, links, etc.)
+- [ ] Responses should add markup for code examples
 
 ## Running the project
 
