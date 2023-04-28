@@ -199,3 +199,16 @@
     text-decoration: underline;
   }
 }
+
+.button-set-as-default {
+  color: $gray-800;
+  border: 1px solid $gray-400;
+  padding: 8px;
+  border-radius: 4px;
+  transition: 0.3s ease-in-out;
+
+  &:hover {
+    color: $orange-800;
+    border: 1px solid $orange-800;
+  }
+}

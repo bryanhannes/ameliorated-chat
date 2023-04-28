@@ -4,6 +4,12 @@
   </ng-container>
   <ng-container ac-dialog-body>
     <div class="model-settings__wrapper">
+
+      <p class="model-settings__subtitle">Actions</p>
+      <button (click)="setSettingsAsDefault()" class="button-set-as-default">Set model settings as default for all
+        future chats
+      </button>
+
       <p class="model-settings__subtitle">Model</p>
       <div class="model-settings__model">
         <label class="model-settings__model__option"

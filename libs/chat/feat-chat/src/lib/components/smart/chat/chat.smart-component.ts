@@ -262,6 +262,22 @@ export class ChatSmartComponent extends ObservableState<State> {
       this.snapshot.currentChatId
     );
   }
+
+  public setDefaultModelSettings({
+    model,
+    temperature,
+    initialSystemInstruction
+  }: {
+    model: string;
+    temperature: number;
+    initialSystemInstruction: string;
+  }): void {
+    this.chatObservableState.setDefaultModelSettingsForChat(
+      model,
+      temperature,
+      initialSystemInstruction
+    );
+  }
 }
 
 const mapToChat = () =>

@@ -13,9 +13,9 @@ export type ChatState = {
   sendOnEnter: boolean;
   userProfilePicUrl: string;
   inputApiKeyDialogVisible: boolean;
-  temperature: number;
-  model: string;
-  initialSystemInstruction: string;
+  defaultTemperature: number;
+  defaultModel: string;
+  defaultInitialSystemInstruction: string;
 };
 
 const mockChats: Chat[] = [
@@ -77,10 +77,10 @@ export class ChatObservableState extends ObservableState<ChatState> {
       sendOnEnter: getFromLocalStorage('sendOnEnter', false),
       userProfilePicUrl: getFromLocalStorage('userProfilePicUrl', ''),
       inputApiKeyDialogVisible: false,
-      temperature: getFromLocalStorage('temperature', 0.6),
-      model: getFromLocalStorage('model', 'gpt-3.5-turbo'),
-      initialSystemInstruction: getFromLocalStorage(
-        'initialSystemInstruction',
+      defaultTemperature: getFromLocalStorage('defaultTemperature', 0.6),
+      defaultModel: getFromLocalStorage('defaultModel', 'gpt-3.5-turbo'),
+      defaultInitialSystemInstruction: getFromLocalStorage(
+        'defaultInitialSystemInstruction',
         'You are ChatGPT, a large language model trained by OpenAI.'
       )
     });
@@ -107,15 +107,14 @@ export class ChatObservableState extends ObservableState<ChatState> {
       title: 'New Chat',
       messages: [
         {
-          content: 'You are ChatGPT, a large language model trained by OpenAI.',
+          content: this.snapshot.defaultInitialSystemInstruction,
           role: 'system'
         }
       ],
-      model: 'gpt-3.5-turbo',
-      systemMessage:
-        'You are ChatGPT, a large language model trained by OpenAI.',
+      model: this.snapshot.defaultModel,
+      systemMessage: this.snapshot.defaultInitialSystemInstruction,
       id: uuid,
-      temperature: 0.5
+      temperature: this.snapshot.defaultTemperature
     };
 
     const chats: Chat[] = [...this.snapshot.chats, chat];
@@ -281,5 +280,24 @@ export class ChatObservableState extends ObservableState<ChatState> {
 
     this.patch({ chats: newChats });
     patchLocalStorage('chats', newChats);
+  }
+
+  public setDefaultModelSettingsForChat(
+    model: string,
+    temperature: number,
+    initialSystemInstruction: string
+  ): void {
+    this.patch({
+      defaultInitialSystemInstruction: initialSystemInstruction,
+      defaultModel: model,
+      defaultTemperature: temperature
+    });
+
+    patchLocalStorage(
+      'defaultInitialSystemInstruction',
+      initialSystemInstruction
+    );
+    patchLocalStorage('defaultModel', model);
+    patchLocalStorage('defaultTemperature', temperature);
   }
 }

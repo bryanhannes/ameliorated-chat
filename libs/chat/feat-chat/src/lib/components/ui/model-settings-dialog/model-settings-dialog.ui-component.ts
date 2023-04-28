@@ -50,6 +50,11 @@ export class ModelSettingsDialogUiComponent extends ObservableState<State> {
   @Output() public readonly initialSystemInstructionChanged =
     new EventEmitter<string>();
   @Output() public readonly temperatureChanged = new EventEmitter<number>();
+  @Output() public readonly setDefaultModelSettings = new EventEmitter<{
+    model: string;
+    initialSystemInstruction: string;
+    temperature: number;
+  }>();
   @Output() public readonly closeDialog = new EventEmitter<void>();
 
   public readonly vm$: Observable<ViewModel> = this.state$.pipe(
@@ -126,5 +131,13 @@ export class ModelSettingsDialogUiComponent extends ObservableState<State> {
 
   public resetTemperatureToDefault(): void {
     this.temperatureChanged.emit(0.5);
+  }
+
+  public setSettingsAsDefault(): void {
+    this.setDefaultModelSettings.emit({
+      model: this.snapshot.model,
+      initialSystemInstruction: this.snapshot.initialSystemInstruction,
+      temperature: this.snapshot.temperature
+    });
   }
 }
