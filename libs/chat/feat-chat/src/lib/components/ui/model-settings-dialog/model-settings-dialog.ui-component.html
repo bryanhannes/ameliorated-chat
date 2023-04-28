@@ -1,0 +1,71 @@
+<ac-dialog (closeDialog)="closeDialog.emit()" *ngIf="vm$ | async as vm">
+  <ng-container ac-dialog-header>
+    <h1>Model Settings</h1>
+  </ng-container>
+  <ng-container ac-dialog-body>
+    <div class="model-settings__wrapper">
+      <p class="model-settings__subtitle">Model</p>
+      <div class="model-settings__model">
+        <label class="model-settings__model__option"
+               [ngClass]="{'model-settings__model__option-checked': vm.model === 'gpt-3.5-turbo'}">
+          <input type="radio" name="model" value="gpt-3.5-turbo"
+                 [ngModel]="vm.model"
+                 (ngModelChange)="onModelChanged($event)">
+
+          <div class="model-settings__model__option__icon">
+            <svg acOpenAiIcon></svg>
+          </div>
+
+          <div class="model-settings__model__option__info">
+            <div class="model-settings__model__option__label">GPT-3.5 Turbo</div>
+            <div class="model-settings__model__option__sublabel">By OpenAI</div>
+          </div>
+        </label>
+        <label class="model-settings__model__option"
+               [ngClass]="{'model-settings__model__option-checked': vm.model === 'gpt-4'}">
+          <input type="radio" name="model" value="gpt-4" [ngModel]="vm.model" (ngModelChange)="onModelChanged($event)">
+          <div class="model-settings__model__option__icon">
+            <svg acOpenAiIcon></svg>
+          </div>
+
+          <div class="model-settings__model__option__info">
+            <div class="model-settings__model__option__label">GPT-4</div>
+            <div class="model-settings__model__option__sublabel">By OpenAI</div>
+          </div>
+
+        </label>
+      </div>
+      <p class="model-settings__subtitle">Initial System Instruction
+        <button (click)="resetSystemInstructionToDefault()" class="button-reset">(Reset to default)</button>
+        <span class="model-settings__system-message-not-allowed" *ngIf="vm.disableSystemMessageToBeUpdated">
+          You can't edit the system message once the chat has started.</span>
+      </p>
+
+      <div class="model-settings__system-message">
+        <textarea [ngModel]="vm.initialSystemInstruction"
+                  [disabled]="vm.disableSystemMessageToBeUpdated"
+                  (ngModelChange)="onSystemInstructionChanged($event)"></textarea>
+        <button *ngIf="vm.systemInstructionChanged" (click)="saveSystemInstruction()"
+                class="button-save-system-message">💾 Save Initial System Instruction
+        </button>
+
+      </div>
+      <p class="model-settings__subtitle">Temperature: {{ vm.temperature }}
+        <button (click)="resetTemperatureToDefault()" class="button-reset">(Reset to default)</button>
+        <span class="model-settings__temperature-help">
+          Lower values like 0.2 = predictable and focused, higher values like 0.9 = more creative and random
+        </span>
+      </p>
+
+      <div class="model-settings__temperature">
+        <input type="range" min="0" max="1" step="0.1" [ngModel]="vm.temperature"
+               (ngModelChange)="onTemperatureChanged($event)">
+        <div class="model-settings__temperature__labels">
+          <div class="model-settings__temperature__label">Precise</div>
+          <div class="model-settings__temperature__label">Neutral</div>
+          <div class="model-settings__temperature__label">Creative</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ac-dialog>

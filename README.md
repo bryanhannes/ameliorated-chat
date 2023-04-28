@@ -26,12 +26,15 @@ If you have any suggestions, please open an issue or make a contribution.
 - [x] Deploy somewhere
 - [x] A title should be automatically generated when creating a new chat
 - [x] As a user I should be able to send a new message by pressing enter or clicking a send button
-
+- [x] As a user I should be able to set the model for the current chat
+- [x] As a user I should be able to select the temperature for the current chat
+- [x] As a user I should be able to set the initial system message for the current chat
 
 - ## Planned features/technical improvements
+- [ ] As a user I should be able to set a default model
+- [ ] As a user I should be able to set a default temperature
+- [ ] As a user I should be able to set a default initial system message
 - [ ] As a user I should be able to group chats in a folder
-- [ ] As a user I should be able to select the model
-- [ ] As a user I should be able to select the temperature
 - [ ] As a user I should be able to choose between a list of default messages
 - [ ] As a user I should be able to toggle between light and dark mode
 - [ ] Nice loading animations

@@ -13,11 +13,15 @@ export type ChatState = {
   sendOnEnter: boolean;
   userProfilePicUrl: string;
   inputApiKeyDialogVisible: boolean;
+  temperature: number;
+  model: string;
+  initialSystemInstruction: string;
 };
 
 const mockChats: Chat[] = [
   {
     title: '(Example) Fix math problem',
+    temperature: 0.5,
     messages: [
       {
         content: 'You are ChatGPT, a large language model trained by OpenAI.',
@@ -38,6 +42,7 @@ const mockChats: Chat[] = [
   },
   {
     title: '(Example) Fruits',
+    temperature: 0.7,
     messages: [
       {
         content: 'You are ChatGPT, a large language model trained by OpenAI.',
@@ -71,7 +76,13 @@ export class ChatObservableState extends ObservableState<ChatState> {
       chats: getFromLocalStorage('chats', mockChats),
       sendOnEnter: getFromLocalStorage('sendOnEnter', false),
       userProfilePicUrl: getFromLocalStorage('userProfilePicUrl', ''),
-      inputApiKeyDialogVisible: false
+      inputApiKeyDialogVisible: false,
+      temperature: getFromLocalStorage('temperature', 0.6),
+      model: getFromLocalStorage('model', 'gpt-3.5-turbo'),
+      initialSystemInstruction: getFromLocalStorage(
+        'initialSystemInstruction',
+        'You are ChatGPT, a large language model trained by OpenAI.'
+      )
     });
   }
 
@@ -103,7 +114,8 @@ export class ChatObservableState extends ObservableState<ChatState> {
       model: 'gpt-3.5-turbo',
       systemMessage:
         'You are ChatGPT, a large language model trained by OpenAI.',
-      id: uuid
+      id: uuid,
+      temperature: 0.5
     };
 
     const chats: Chat[] = [...this.snapshot.chats, chat];
@@ -212,5 +224,62 @@ export class ChatObservableState extends ObservableState<ChatState> {
   public toggleSendOnEnter(): void {
     this.patch({ sendOnEnter: !this.snapshot.sendOnEnter });
     patchLocalStorage('sendOnEnter', this.snapshot.sendOnEnter);
+  }
+
+  public setTemperatureForChat(temperature: number, chatId: string): void {
+    const newChats: Chat[] = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          temperature
+        };
+      }
+      return chat;
+    });
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
+
+  public setModelForChat(model: string, chatId: string): void {
+    const newChats: Chat[] = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          model
+        };
+      }
+      return chat;
+    });
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
+
+  public setInitialSystemInstructionForChat(
+    instruction: string,
+    chatId: string
+  ): void {
+    const newChats: Chat[] = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          systemMessage: instruction,
+          messages: chat.messages.map((message) => {
+            if (message.role === 'system') {
+              return {
+                ...message,
+                content: instruction
+              };
+            }
+            return message;
+          })
+        };
+      }
+      return chat;
+    });
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
   }
 }

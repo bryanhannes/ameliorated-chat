@@ -16,6 +16,7 @@
       <ac-chat-message *ngFor="let message of vm.chat.messages; trackBy: tracker" [message]="message"
                        [userProfilePicUrl]="vm.userProfilePicUrl"
                        (userProfilePicClicked)="openUserProfileDialog()"
+                       (systemOptionsClicked)="openSystemOptionsDialog()"
       ></ac-chat-message>
     </div>
 
@@ -25,6 +26,14 @@
                                  (closeDialog)="closeUserProfileDialog()"
                                  (profilePicUrlEntered)="setProfilePic($event)"
     ></ac-profile-pic-input-dialog>
+
+
+    <ac-model-settings-dialog *ngIf="vm.systemOptionsDialogVisible"
+                              [chat]="vm.chat"
+                              (modelChanged)="modelChanged($event)"
+                              (temperatureChanged)="temperatureChanged($event)"
+                              (initialSystemInstructionChanged)="initialSystemInstructionChanged($event)"
+                              (closeDialog)="closeSystemOptionsDialog()"></ac-model-settings-dialog>
 
 
     <div class="chatbox">

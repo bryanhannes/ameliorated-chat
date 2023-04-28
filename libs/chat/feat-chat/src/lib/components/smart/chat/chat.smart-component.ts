@@ -5,18 +5,20 @@ import { AppInfoUiComponent } from '../../ui/app-info/app-info.ui-component';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { Chat, Message } from '@ameliorated-chat/chat/type-chat';
 import { FacadeService } from '../../../facade.service';
-import { map, Observable, pipe } from 'rxjs';
+import { map, Observable, pipe, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-component';
 import { ApiKeyInputDialogUiComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.ui-component';
 import { ProfilePicInputDialogUiComponent } from '../../ui/profile-pic-input-dialog/profile-pic-input-dialog.ui-component';
 import { generateUUID } from '@ameliorated-chat/frontend/util-uuid';
 import { getCurrentId } from '../../../utils/current-id.util';
+import { ModelSettingsDialogUiComponent } from '../../ui/model-settings-dialog/model-settings-dialog.ui-component';
 
 type ViewModel = {
   chat: Chat | null;
   inputApiKeyDialogVisible: boolean;
   userProfilePicDialogVisible: boolean;
+  systemOptionsDialogVisible: boolean;
   showInputApiKey: boolean;
   openAIApiKey: string;
   userProfilePicUrl: string;
@@ -30,6 +32,7 @@ type State = {
   currentChatId: string;
   inputApiKeyDialogVisible: boolean;
   userProfilePicDialogVisible: boolean;
+  systemOptionsDialogVisible: boolean;
   openAIApiKey: string;
   userProfilePicUrl: string;
   sendOnEnter: boolean;
@@ -45,7 +48,8 @@ type State = {
     AppInfoUiComponent,
     ChatMessageUiComponent,
     ApiKeyInputDialogUiComponent,
-    ProfilePicInputDialogUiComponent
+    ProfilePicInputDialogUiComponent,
+    ModelSettingsDialogUiComponent
   ],
   templateUrl: './chat.smart-component.html',
   styleUrls: ['./chat.smart-component.scss']
@@ -64,7 +68,8 @@ export class ChatSmartComponent extends ObservableState<State> {
     'openAIApiKey',
     'userProfilePicUrl',
     'sendOnEnter',
-    'sidebarOpen'
+    'sidebarOpen',
+    'systemOptionsDialogVisible'
   ]).pipe(
     map(
       ({
@@ -74,7 +79,8 @@ export class ChatSmartComponent extends ObservableState<State> {
         userProfilePicUrl,
         userProfilePicDialogVisible,
         sendOnEnter,
-        sidebarOpen
+        sidebarOpen,
+        systemOptionsDialogVisible
       }) => ({
         chat,
         inputApiKeyDialogVisible,
@@ -83,7 +89,8 @@ export class ChatSmartComponent extends ObservableState<State> {
         userProfilePicUrl,
         userProfilePicDialogVisible,
         sendOnEnter,
-        sidebarOpen
+        sidebarOpen,
+        systemOptionsDialogVisible
       })
     )
   );
@@ -98,6 +105,7 @@ export class ChatSmartComponent extends ObservableState<State> {
       currentChatId: this.activatedRoute.snapshot.params['id'],
       inputApiKeyDialogVisible: false,
       userProfilePicDialogVisible: false,
+      systemOptionsDialogVisible: false,
       openAIApiKey: this.chatObservableState.snapshot.openAIApiKey,
       userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl,
       sendOnEnter: this.chatObservableState.snapshot.sendOnEnter,
@@ -116,7 +124,10 @@ export class ChatSmartComponent extends ObservableState<State> {
         'sidebarOpen'
       ]),
       currentChatId: currentChatId$,
-      chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
+      chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(
+        mapToChat(),
+        tap(console.log)
+      )
     });
   }
 
@@ -219,6 +230,37 @@ export class ChatSmartComponent extends ObservableState<State> {
 
   public toggleSendOnEnter(): void {
     this.chatObservableState.toggleSendOnEnter();
+  }
+
+  public openSystemOptionsDialog(): void {
+    this.patch({ systemOptionsDialogVisible: true });
+  }
+
+  public closeSystemOptionsDialog(): void {
+    this.patch({ systemOptionsDialogVisible: false });
+  }
+
+  public modelChanged(model: string): void {
+    this.chatObservableState.setModelForChat(
+      model,
+      this.snapshot.currentChatId
+    );
+  }
+
+  public temperatureChanged(temperature: number): void {
+    this.chatObservableState.setTemperatureForChat(
+      temperature,
+      this.snapshot.currentChatId
+    );
+  }
+
+  public initialSystemInstructionChanged(
+    initialSystemInstruction: string
+  ): void {
+    this.chatObservableState.setInitialSystemInstructionForChat(
+      initialSystemInstruction,
+      this.snapshot.currentChatId
+    );
   }
 }
 

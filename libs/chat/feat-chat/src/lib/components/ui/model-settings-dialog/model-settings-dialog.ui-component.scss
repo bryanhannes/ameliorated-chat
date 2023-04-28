@@ -1,0 +1,201 @@
+@import 'libs/frontend/ui-design-system/src/lib/styling/breakpoints';
+@import 'libs/frontend/ui-design-system/src/lib/styling/spacing';
+@import 'libs/frontend/ui-design-system/src/lib/styling/colors';
+
+.model-settings {
+  &__wrapper {
+    min-width: 80vw;
+    max-width: 600px;
+
+    @media (min-width: $breakpoint-sm) {
+      min-width: 500px;
+    }
+
+    @media (min-width: $breakpoint-md) {
+      min-width: 600px;
+    }
+  }
+
+  &__subtitle {
+    margin: $spacing-small 0;
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  &__model {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    width: 100%;
+    gap: $spacing-small;
+
+    @media (min-width: $breakpoint-md) {
+      flex-direction: row;
+    }
+
+    &__option {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 0.5rem;
+      border: 1px solid $gray-300;
+      border-radius: 4px;
+      padding: $spacing-small;
+      flex: 1;
+      gap: $spacing-small;
+      transition: border 0.2s ease-in-out;
+
+      &:hover {
+        border: 1px solid $orange-600;
+        cursor: pointer;
+      }
+
+      &-checked {
+        border: 2px solid $orange-600;
+
+        &:hover {
+          border: 2px solid $orange-600;
+        }
+      }
+
+      &__icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      &__label {
+        font-weight: bold;
+      }
+
+      &__sublabel {
+        font-size: 0.8rem;
+      }
+
+      input[type="radio"] {
+        display: none;
+      }
+
+      input[type="radio"]:checked {
+        border: 1px solid $red;
+      }
+
+      //input[type="radio"]:checked + .model-settings__model__option__label {
+      //  border: 1px solid blue;
+      //}
+    }
+  }
+
+  &__system-message {
+    width: 100%;
+
+    textarea {
+      width: 100%;
+      border: 1px solid $gray-300;
+      border-radius: 4px;
+      padding: $spacing-small;
+    }
+
+    &-not-allowed {
+      color: $red;
+      font-size: 0.8rem;
+      margin-bottom: $spacing-small;
+      display: block;
+      font-weight: normal;
+    }
+  }
+
+  &__temperature {
+    input[type=range] {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+
+      &::-webkit-slider-runnable-track {
+        background: $orange-100;
+        height: 0.5rem;
+        border-radius: 4px;
+      }
+
+      &::-moz-range-track {
+        background: $orange-100;
+        height: 0.5rem;
+        border-radius: 4px;
+      }
+
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        background-color: $orange-600;
+        margin-top: -0.25rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+      }
+
+      &::-moz-range-thumb {
+        border: none; /*Removes extra border that FF applies*/
+        border-radius: 0; /*Removes default border-radius that FF applies*/
+        background-color: $orange-600;
+        height: 2rem;
+        width: 1rem;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:focus::-webkit-slider-thumb {
+        border: 1px solid $orange-600;
+        outline: 3px solid $orange-700;
+        outline-offset: 0.125rem;
+      }
+
+      &:focus::-moz-range-thumb {
+        border: 1px solid $orange-600;
+        outline: 3px solid $orange-700;
+        outline-offset: 0.125rem;
+      }
+    }
+
+    &__labels {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    &-help {
+      font-size: 0.8rem;
+      display: block;
+      font-weight: normal;
+      margin-bottom: $spacing-small;
+    }
+  }
+}
+
+.button-save-system-message {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  height: 40px;
+  border-radius: 4px;
+  background-color: $orange-200;
+  padding: 0.5rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $orange-300;
+  }
+}
+
+.button-reset {
+  font-size: 0.8rem;
+  color: $orange-600;
+  font-weight: normal;
+
+  &:hover {
+    color: $orange-700;
+    text-decoration: underline;
+  }
+}

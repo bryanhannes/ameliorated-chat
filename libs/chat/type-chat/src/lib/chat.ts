@@ -6,4 +6,5 @@ export type Chat = {
   model: string;
   systemMessage: string;
   messages: Message[];
+  temperature: number;
 };

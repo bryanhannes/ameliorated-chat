@@ -1,7 +1,8 @@
 <ng-container *ngIf="vm$ | async as vm">
   <div class="message__wrapper">
     <div class="message__avatar">
-      <ng-container *ngIf="vm.isUserMessage; else otherAvatars">
+
+      <ng-container *ngIf="vm.isUserMessage">
         <button (click)="userAvatarClicked()" class="button-user"
                 [ngClass]="{ 'button-user-default': !vm.isDefaultUserIcon}">
           <img [src]="vm.avatarUrl" alt="" class="user-avatar">
@@ -9,9 +10,17 @@
         </button>
       </ng-container>
 
-      <ng-template #otherAvatars>
+      <ng-container *ngIf="vm.isSystemMessage;">
+        <button (click)="systemAvatarClicked()" class="button-system"
+                [ngClass]="{ 'button-user-default': !vm.isDefaultUserIcon}">
+          <img [src]="vm.avatarUrl" alt="Avatar Icon">
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="vm.isAssistantMessage;">
         <img [src]="vm.avatarUrl" alt="Avatar Icon">
-      </ng-template>
+      </ng-container>
+
     </div>
     <div class="message__content" [ngClass]="{ 'message__content--user': vm.isUserMessage }">
       {{ vm.message }}

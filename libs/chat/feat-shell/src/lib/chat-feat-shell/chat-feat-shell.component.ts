@@ -9,15 +9,18 @@ import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { FacadeService } from '../facade.service';
 import { map, Observable } from 'rxjs';
 import {
+  getCurrentId,
   SidebarContentSmartComponent,
   SidebarFooterContentUiComponent
 } from '@ameliorated-chat/chat/feat-chat';
 import { Chat } from '@ameliorated-chat/chat/type-chat';
-import { getCurrentId } from '../../../../feat-chat/src/lib/utils/current-id.util';
 
 type PageViewModel = {
   sidebarOpen: boolean;
   currentChatTitle: string;
+  temperatureOfCurrentChat: number;
+  modelOfCurrentChat: string;
+  messagesCountOfCurrentChat: number;
 };
 
 type State = {
@@ -55,7 +58,10 @@ export class ChatFeatShellComponent extends ObservableState<State> {
   ]).pipe(
     map(({ sidebarOpen, currentChat }) => ({
       sidebarOpen,
-      currentChatTitle: currentChat ? currentChat?.title : ''
+      currentChatTitle: currentChat ? currentChat?.title : '',
+      temperatureOfCurrentChat: currentChat ? currentChat?.temperature : 0,
+      modelOfCurrentChat: currentChat ? currentChat?.model : '',
+      messagesCountOfCurrentChat: currentChat ? currentChat?.messages.length : 0
     }))
   );
 

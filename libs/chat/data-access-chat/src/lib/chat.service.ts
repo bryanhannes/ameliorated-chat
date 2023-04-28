@@ -5,7 +5,11 @@ import { getFromLocalStorage } from '@ameliorated-chat/frontend/util-local-stora
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  public newChatMessage(messages: Message[]): Observable<string> {
+  public newChatMessage(
+    messages: Message[],
+    temperature: number = 0.5,
+    model: string = 'gpt-3.5-turbo'
+  ): Observable<string> {
     const apiKey = getFromLocalStorage('openApiKey');
     const url = 'https://api.openai.com/v1/chat/completions';
 
@@ -44,9 +48,9 @@ export class ChatService {
 
       xhr.send(
         JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model,
           messages,
-          temperature: 0.5,
+          temperature,
           frequency_penalty: 0,
           presence_penalty: 0,
           stream: true
