@@ -38,7 +38,10 @@ const mockChats: Chat[] = [
     ],
     model: 'gpt-3.5-turbo',
     systemMessage: 'You are ChatGPT, a large language model trained by OpenAI.',
-    id: 'd3bd-d3bd-4430-9cc8-7aa79dca126a90da1a66'
+    id: 'd3bd-d3bd-4430-9cc8-7aa79dca126a90da1a66',
+    favorited: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     title: '(Example) Fruits',
@@ -60,7 +63,9 @@ const mockChats: Chat[] = [
     ],
     model: 'gpt-3.5-turbo',
     systemMessage: 'You are ChatGPT, a large language model trained by OpenAI.',
-    id: '7c34-7c34-4430-8fc0-3007152ae67cd91410a1'
+    id: '7c34-7c34-4430-8fc0-3007152ae67cd91410a1',
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];
 
@@ -114,7 +119,9 @@ export class ChatObservableState extends ObservableState<ChatState> {
       model: this.snapshot.defaultModel,
       systemMessage: this.snapshot.defaultInitialSystemInstruction,
       id: uuid,
-      temperature: this.snapshot.defaultTemperature
+      temperature: this.snapshot.defaultTemperature,
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
     const chats: Chat[] = [...this.snapshot.chats, chat];
@@ -299,5 +306,20 @@ export class ChatObservableState extends ObservableState<ChatState> {
     );
     patchLocalStorage('defaultModel', model);
     patchLocalStorage('defaultTemperature', temperature);
+  }
+
+  public toggleChatAsFavorite(chatId: string): void {
+    const newChats: Chat[] = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          favorited: !chat.favorited
+        };
+      }
+      return chat;
+    });
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
   }
 }

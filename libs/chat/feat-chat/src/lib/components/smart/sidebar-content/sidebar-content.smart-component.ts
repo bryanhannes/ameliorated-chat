@@ -98,6 +98,20 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
       this.router.navigateByUrl('/');
     }
   }
+
+  public toggleChatAsFavorite(chatId: string): void {
+    this.chatObservableState.toggleChatAsFavorite(chatId);
+  }
+
+  public chatClicked(chatId: string): void {
+    this.router.navigate([chatId]);
+    this.patch({ currentChatId: chatId });
+
+    // TODO Is there a better way to check if the screen is mobile?
+    if (window.innerWidth < 768) {
+      this.chatObservableState.toggleSidebar();
+    }
+  }
 }
 
 const mapToFilteredChats = () =>

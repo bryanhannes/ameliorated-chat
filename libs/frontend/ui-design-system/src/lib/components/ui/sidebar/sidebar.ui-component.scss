@@ -14,10 +14,13 @@
   }
 
   &__body {
+    height: calc(100vh - 130px);
+    overflow-y: auto;
   }
 
   &__footer {
     margin-top: auto;
+    height: 130px;
   }
 
   &__close {

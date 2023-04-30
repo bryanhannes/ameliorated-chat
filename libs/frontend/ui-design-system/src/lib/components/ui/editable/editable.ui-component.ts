@@ -1,10 +1,9 @@
 import {
   Component,
-  ElementRef,
   EventEmitter,
   HostListener,
-  Output,
-  ViewChild
+  Input,
+  Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,9 +29,10 @@ type State = {
   styleUrls: ['./editable.ui-component.scss']
 })
 export class EditableUiComponent extends ObservableState<State> {
+  @Input() public value = '';
   @Output() public readonly edited = new EventEmitter<string>();
   @Output() public readonly deleted = new EventEmitter();
-  public value = '';
+  @Output() public readonly clicked = new EventEmitter();
 
   public readonly vm$: Observable<PageViewModel> = this.state$.pipe(
     map(({ isEditing, deleteClickCount }) => ({
@@ -60,8 +60,6 @@ export class EditableUiComponent extends ObservableState<State> {
     });
   }
 
-  @ViewChild('contentWrapper') public contentWrapper!: ElementRef;
-
   public cancelEdit(): void {
     this.patch({ isEditing: false });
   }
@@ -75,7 +73,6 @@ export class EditableUiComponent extends ObservableState<State> {
 
   public startEdit() {
     this.patch({ isEditing: true });
-    this.value = this.contentWrapper.nativeElement.innerText;
   }
 
   @HostListener('document:keydown.enter')
@@ -86,6 +83,21 @@ export class EditableUiComponent extends ObservableState<State> {
   @HostListener('document:keydown.escape')
   public onEscapePressed(): void {
     this.cancelEdit();
+  }
+
+  @HostListener('click', ['$event'])
+  public onClick(event: MouseEvent): void {
+    event.stopPropagation();
+    const target = event.target as HTMLElement;
+    console.log(target);
+    if (
+      !target.className.includes('view-mode__button-') &&
+      !target.className.includes('edit-mode__button-') &&
+      !this.snapshot.isEditing
+    ) {
+      console.log('emit click');
+      this.clicked.emit();
+    }
   }
 
   public deleteClicked(): void {

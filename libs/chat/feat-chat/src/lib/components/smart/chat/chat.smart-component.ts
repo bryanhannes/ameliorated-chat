@@ -5,7 +5,7 @@ import { AppInfoUiComponent } from '../../ui/app-info/app-info.ui-component';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { Chat, Message } from '@ameliorated-chat/chat/type-chat';
 import { FacadeService } from '../../../facade.service';
-import { map, Observable, pipe, tap } from 'rxjs';
+import { map, Observable, pipe } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatMessageUiComponent } from '../../ui/chat-message/chat-message.ui-component';
 import { ApiKeyInputDialogUiComponent } from '../../ui/api-key-input-dialog/api-key-input-dialog.ui-component';
@@ -124,10 +124,7 @@ export class ChatSmartComponent extends ObservableState<State> {
         'sidebarOpen'
       ]),
       currentChatId: currentChatId$,
-      chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(
-        mapToChat(),
-        tap(console.log)
-      )
+      chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
     });
   }
 
@@ -191,7 +188,6 @@ export class ChatSmartComponent extends ObservableState<State> {
         .generateTitleForChat(userMessage, assistantMessage)
         .subscribe({
           next: (chunk) => {
-            console.log(chunk);
             this.chatObservableState.newChatTitleChunk(
               chunk,
               this.snapshot.currentChatId

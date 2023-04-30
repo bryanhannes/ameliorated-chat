@@ -32,7 +32,8 @@ If you have any suggestions, please open an issue or make a contribution.
 - [x] As a user I should be able to set a default model for future chats
 - [x] As a user I should be able to set a default temperature for future chats
 - [x] As a user I should be able to set a default initial system message for future chats
--
+- [x] As a user I should be able to mark chats as favorites
+
 - ## Planned features/technical improvements
 - [ ] As a user I should be able to group chats in a folder
 - [ ] As a user I should be able to choose between a list of default messages
@@ -41,6 +42,9 @@ If you have any suggestions, please open an issue or make a contribution.
 - [ ] As a user I should be able to select a prompt from a prompt library
 - [ ] Responses should have some markup (e.g. bold, italic, links, etc.)
 - [ ] Responses should add markup for code examples
+- [ ] As a user I should see my chat history in a timeline (grouped by date) Today - yesterday - last 7 days - last 30
+  days (check how chatGPT does this)
+- [ ] As a user I should be able to add a new chat by with query params = text for the message and model for the model
 
 ## Running the project
 

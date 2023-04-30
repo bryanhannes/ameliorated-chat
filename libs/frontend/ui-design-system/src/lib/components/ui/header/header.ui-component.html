@@ -3,10 +3,7 @@
     <div class="header__hamburger">
       <button type="button" class="header__button" (click)="onOpenHamburgerMenu()">
         <span class="sr-only">Open sidebar</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-             aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-        </svg>
+        <svg acBurgerIcon></svg>
       </button>
     </div>
 
@@ -14,14 +11,8 @@
       <ng-content></ng-content>
     </div>
 
-    <div class="header__settings">
-      <button type="button" class="header__button" (click)="onOpenSettingsMenu()">
-        <span class="sr-only">Open settings</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-             aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-        </svg>
-      </button>
+    <div class="header__options">
+      <ng-content select="[ac-header-options]"></ng-content>
     </div>
   </header>
 
