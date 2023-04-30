@@ -6,4 +6,9 @@ export type Chat = {
   model: string;
   systemMessage: string;
   messages: Message[];
+  temperature: number;
+  folderId?: string;
+  favorited?: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };

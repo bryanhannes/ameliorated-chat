@@ -2,21 +2,32 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  inject,
+  Input,
   Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ObservableState } from '@ameliorated-chat/frontend/util-state';
+import {
+  getDefaultInputState,
+  InputState,
+  ObservableState
+} from '@ameliorated-chat/frontend/util-state';
 import { map, Observable } from 'rxjs';
-import { FacadeService } from '../../../facade.service';
 
 type PageViewModel = {
   sidebarOpen: boolean;
+  showSendOnEnterCheckbox: boolean;
+  message: string;
+  sendOnEnter: boolean;
 };
 
-type State = {
+type ChatboxInputState = {
+  sendOnEnter: boolean;
   sidebarOpen: boolean;
+};
+
+type State = ChatboxInputState & {
+  message: string;
 };
 
 @Component({
@@ -28,30 +39,36 @@ type State = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChatboxUiComponent extends ObservableState<State> {
-  private readonly facade = inject(FacadeService);
-  private readonly chatObservableState = this.facade.chatObservableState;
-  public message = '';
+  @InputState()
+  private readonly inputState$!: Observable<ChatboxInputState>;
+
+  @Input() public sidebarOpen = false;
+  @Input() public sendOnEnter = false;
+  @Output() public readonly newMessage = new EventEmitter<string>();
+  @Output() public readonly toggleSendOnEnter = new EventEmitter();
 
   public readonly vm$: Observable<PageViewModel> = this.onlySelectWhen([
-    'sidebarOpen'
+    'sidebarOpen',
+    'sendOnEnter',
+    'message'
   ]).pipe(
-    map(({ sidebarOpen }) => ({
-      sidebarOpen
+    map(({ sidebarOpen, sendOnEnter, message }) => ({
+      sidebarOpen,
+      message,
+      sendOnEnter,
+      showSendOnEnterCheckbox: message.length > 0
     }))
   );
 
-  @Output()
-  public readonly newMessage = new EventEmitter<string>();
-
   constructor() {
     super();
-    this.initialize({
-      sidebarOpen: false
-    });
-
-    this.connect({
-      ...this.chatObservableState.pick(['sidebarOpen'])
-    });
+    this.initialize(
+      {
+        ...getDefaultInputState(this),
+        message: ''
+      },
+      this.inputState$
+    );
   }
 
   public onTextAreaInput(): void {
@@ -63,7 +80,24 @@ export class ChatboxUiComponent extends ObservableState<State> {
   }
 
   public onSend(): void {
-    this.newMessage.emit(this.message);
-    this.message = '';
+    this.newMessage.emit(this.snapshot.message);
+    this.patch({ message: '' });
+  }
+
+  public updateMessage(message: string): void {
+    // When send on enter is enabled, we want to send the message when the user presses enter
+    if (
+      this.snapshot.sendOnEnter &&
+      message.charAt(message.length - 1) === '\n'
+    ) {
+      this.patch({ message: message.slice(0, -1) });
+      this.onSend();
+    } else {
+      this.patch({ message });
+    }
+  }
+
+  public onSendOnEnterChanged(): void {
+    this.toggleSendOnEnter.emit();
   }
 }

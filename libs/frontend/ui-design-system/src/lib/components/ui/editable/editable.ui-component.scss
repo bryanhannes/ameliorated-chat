@@ -4,30 +4,41 @@
 .view-mode {
   display: flex;
   flex-direction: row;
-  gap: $spacing-small;
   align-items: center;
+  width: 100%;
 
   &__content {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     flex: 1;
+    padding: 8px 0;
   }
 
   &__buttons {
-    display: flex;
+    display: none;
     flex-direction: row;
-    gap: $spacing-medium;
-    padding: 4px;
+    padding-right: 4px;
   }
 }
 
+:host:hover {
+  .view-mode__content {
+    flex: 0 1 190px;
+  }
+
+  .view-mode__buttons {
+    display: flex;
+  }
+}
 
 .edit-mode {
   display: flex;
   flex-direction: row;
   gap: $spacing-small;
   align-items: center;
+  width: 100%;
+  padding: 4px;
 
   textarea {
     flex: 1;
@@ -46,14 +57,13 @@
   &__buttons {
     display: flex;
     flex-direction: row;
-    gap: $spacing-medium;
-    padding: 4px;
   }
 }
 
 button {
   color: $black;
   transition: 0.2s ease-in-out;
+  padding: 8px;
 
   &:hover {
     color: $orange-600;

@@ -12,14 +12,18 @@ import { ApiKeyInputDialogUiComponent } from '../../ui/api-key-input-dialog/api-
 import { ProfilePicInputDialogUiComponent } from '../../ui/profile-pic-input-dialog/profile-pic-input-dialog.ui-component';
 import { generateUUID } from '@ameliorated-chat/frontend/util-uuid';
 import { getCurrentId } from '../../../utils/current-id.util';
+import { ModelSettingsDialogUiComponent } from '../../ui/model-settings-dialog/model-settings-dialog.ui-component';
 
 type ViewModel = {
   chat: Chat | null;
   inputApiKeyDialogVisible: boolean;
   userProfilePicDialogVisible: boolean;
+  systemOptionsDialogVisible: boolean;
   showInputApiKey: boolean;
   openAIApiKey: string;
   userProfilePicUrl: string;
+  sendOnEnter: boolean;
+  sidebarOpen: boolean;
 };
 
 type State = {
@@ -28,8 +32,11 @@ type State = {
   currentChatId: string;
   inputApiKeyDialogVisible: boolean;
   userProfilePicDialogVisible: boolean;
+  systemOptionsDialogVisible: boolean;
   openAIApiKey: string;
   userProfilePicUrl: string;
+  sendOnEnter: boolean;
+  sidebarOpen: boolean;
 };
 
 @Component({
@@ -41,7 +48,8 @@ type State = {
     AppInfoUiComponent,
     ChatMessageUiComponent,
     ApiKeyInputDialogUiComponent,
-    ProfilePicInputDialogUiComponent
+    ProfilePicInputDialogUiComponent,
+    ModelSettingsDialogUiComponent
   ],
   templateUrl: './chat.smart-component.html',
   styleUrls: ['./chat.smart-component.scss']
@@ -58,7 +66,10 @@ export class ChatSmartComponent extends ObservableState<State> {
     'inputApiKeyDialogVisible',
     'userProfilePicDialogVisible',
     'openAIApiKey',
-    'userProfilePicUrl'
+    'userProfilePicUrl',
+    'sendOnEnter',
+    'sidebarOpen',
+    'systemOptionsDialogVisible'
   ]).pipe(
     map(
       ({
@@ -66,14 +77,20 @@ export class ChatSmartComponent extends ObservableState<State> {
         inputApiKeyDialogVisible,
         openAIApiKey,
         userProfilePicUrl,
-        userProfilePicDialogVisible
+        userProfilePicDialogVisible,
+        sendOnEnter,
+        sidebarOpen,
+        systemOptionsDialogVisible
       }) => ({
         chat,
         inputApiKeyDialogVisible,
         showInputApiKey: openAIApiKey.length === 0,
         openAIApiKey,
         userProfilePicUrl,
-        userProfilePicDialogVisible
+        userProfilePicDialogVisible,
+        sendOnEnter,
+        sidebarOpen,
+        systemOptionsDialogVisible
       })
     )
   );
@@ -88,8 +105,11 @@ export class ChatSmartComponent extends ObservableState<State> {
       currentChatId: this.activatedRoute.snapshot.params['id'],
       inputApiKeyDialogVisible: false,
       userProfilePicDialogVisible: false,
+      systemOptionsDialogVisible: false,
       openAIApiKey: this.chatObservableState.snapshot.openAIApiKey,
-      userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl
+      userProfilePicUrl: this.chatObservableState.snapshot.userProfilePicUrl,
+      sendOnEnter: this.chatObservableState.snapshot.sendOnEnter,
+      sidebarOpen: this.chatObservableState.snapshot.sidebarOpen
     });
 
     const currentChatId$ = getCurrentId(this.router, this.activatedRoute);
@@ -99,7 +119,9 @@ export class ChatSmartComponent extends ObservableState<State> {
         'chats',
         'openAIApiKey',
         'inputApiKeyDialogVisible',
-        'userProfilePicUrl'
+        'userProfilePicUrl',
+        'sendOnEnter',
+        'sidebarOpen'
       ]),
       currentChatId: currentChatId$,
       chat: this.onlySelectWhen(['chats', 'currentChatId']).pipe(mapToChat())
@@ -166,7 +188,6 @@ export class ChatSmartComponent extends ObservableState<State> {
         .generateTitleForChat(userMessage, assistantMessage)
         .subscribe({
           next: (chunk) => {
-            console.log(chunk);
             this.chatObservableState.newChatTitleChunk(
               chunk,
               this.snapshot.currentChatId
@@ -201,6 +222,57 @@ export class ChatSmartComponent extends ObservableState<State> {
   public setProfilePic(url: string): void {
     this.chatObservableState.setUserProfilePicUrl(url);
     this.closeUserProfileDialog();
+  }
+
+  public toggleSendOnEnter(): void {
+    this.chatObservableState.toggleSendOnEnter();
+  }
+
+  public openSystemOptionsDialog(): void {
+    this.patch({ systemOptionsDialogVisible: true });
+  }
+
+  public closeSystemOptionsDialog(): void {
+    this.patch({ systemOptionsDialogVisible: false });
+  }
+
+  public modelChanged(model: string): void {
+    this.chatObservableState.setModelForChat(
+      model,
+      this.snapshot.currentChatId
+    );
+  }
+
+  public temperatureChanged(temperature: number): void {
+    this.chatObservableState.setTemperatureForChat(
+      temperature,
+      this.snapshot.currentChatId
+    );
+  }
+
+  public initialSystemInstructionChanged(
+    initialSystemInstruction: string
+  ): void {
+    this.chatObservableState.setInitialSystemInstructionForChat(
+      initialSystemInstruction,
+      this.snapshot.currentChatId
+    );
+  }
+
+  public setDefaultModelSettings({
+    model,
+    temperature,
+    initialSystemInstruction
+  }: {
+    model: string;
+    temperature: number;
+    initialSystemInstruction: string;
+  }): void {
+    this.chatObservableState.setDefaultModelSettingsForChat(
+      model,
+      temperature,
+      initialSystemInstruction
+    );
   }
 }
 

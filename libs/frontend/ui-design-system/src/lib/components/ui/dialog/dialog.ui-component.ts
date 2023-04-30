@@ -41,7 +41,7 @@ export class DialogUiComponent implements OnInit, AfterViewInit, OnDestroy {
       .global()
       .centerHorizontally()
       .centerVertically(),
-    scrollStrategy: this.overlay.scrollStrategies.noop(),
+    scrollStrategy: this.overlay.scrollStrategies.reposition(),
     disposeOnNavigation: true
   });
   private overlayRef = this.overlay.create(this.overlayConfig);

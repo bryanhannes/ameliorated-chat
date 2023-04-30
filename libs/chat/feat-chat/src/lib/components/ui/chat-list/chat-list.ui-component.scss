@@ -4,10 +4,28 @@
 .chats {
   &__item {
     display: flex;
-    flex-direction: column;
-    padding: $spacing-medium;
+    flex-direction: row;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
+    height: 50px;
+    font-size: 0.9rem;
+
+    .button-mark-as-favorite {
+      padding: 0 8px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        color: $orange-600;
+        cursor: pointer;
+      }
+
+      &.favorite {
+        color: $orange-600;
+      }
+    }
 
     &:hover {
       background-color: $gray-300;
@@ -16,18 +34,37 @@
     &--active {
       background-color: $gray-300;
     }
+
+    .chat-title {
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+    }
   }
 }
-
 
 .no-chats {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: $gray-600;
   margin: $spacing-small;
   border-radius: 4px;
   text-align: center;
+}
+
+.favorited-chats {
+  &__wrapper {
+    border-bottom: 1px solid $gray-300;
+  }
+
+  &__title {
+    padding: 0 $spacing-medium;
+    color: $gray-600;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.8rem;
+  }
 }

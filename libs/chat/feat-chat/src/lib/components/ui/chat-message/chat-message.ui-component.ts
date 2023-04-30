@@ -19,6 +19,8 @@ type ViewModel = {
   message: string;
   avatarUrl: string;
   isUserMessage: boolean;
+  isSystemMessage: boolean;
+  isAssistantMessage: boolean;
   isDefaultUserIcon: boolean;
 };
 
@@ -36,10 +38,13 @@ export class ChatMessageUiComponent {
   @Input() public message: Message | null = null;
   @Input() public userProfilePicUrl = '';
   @Output() public readonly userProfilePicClicked = new EventEmitter<void>();
+  @Output() public readonly systemOptionsClicked = new EventEmitter<void>();
 
   public readonly vm$: Observable<ViewModel> = this.inputState$.pipe(
     map(({ message, userProfilePicUrl }) => {
       const isUserMessage = message?.role === 'user';
+      const isSystemMessage = message?.role === 'system';
+      const isAssistantMessage = message?.role === 'assistant';
       const isDefaultUserIcon =
         !!userProfilePicUrl && userProfilePicUrl.length > 0;
       const avatarUrl =
@@ -51,6 +56,8 @@ export class ChatMessageUiComponent {
         message: message?.content ?? '',
         avatarUrl: avatarUrl,
         isUserMessage,
+        isSystemMessage,
+        isAssistantMessage,
         isDefaultUserIcon
       };
     })
@@ -58,6 +65,10 @@ export class ChatMessageUiComponent {
 
   public userAvatarClicked(): void {
     this.userProfilePicClicked.emit();
+  }
+
+  public systemAvatarClicked(): void {
+    this.systemOptionsClicked.emit();
   }
 }
 

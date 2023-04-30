@@ -12,11 +12,28 @@
       </ac-sidebar>
     </div>
     <button (click)="closeHamburgerMenu()" class="overlay" [ngClass]="{ 'overlay-visible': !vm.sidebarOpen }"></button>
-
     <div class="page__body" [ngClass]="{ 'page__body-open': vm.sidebarOpen }">
-      <ac-header (openHamburgerMenu)="openHamburgerMenu()" (openSettingsMenu)="openSettingsMenu()">
-        {{vm.currentChatTitle}}
+      <ac-header [sidebarOpen]="vm.sidebarOpen" (openHamburgerMenu)="openHamburgerMenu()">
+        <div class="chat-header__wrapper">
+          <div class="chat-header__title">
+            {{ vm.currentChatTitle }}
+          </div>
+          <div class="chat-header__properties">
+            <span class="chat-header__properties-property">
+              {{ vm.modelOfCurrentChat }}
+            </span>
+            <span class="chat-header__properties-property-divider"></span>
+            <span class="chat-header__properties-property">
+              Temp: {{ vm.temperatureOfCurrentChat }}
+            </span>
+            <span class="chat-header__properties-property-divider"></span>
+            <span class="chat-header__properties-property">
+              {{ vm.messagesCountOfCurrentChat }} messages
+            </span>
+          </div>
+        </div>
       </ac-header>
+
       <main>
         <router-outlet></router-outlet>
       </main>

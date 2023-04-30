@@ -9,15 +9,20 @@ import { ObservableState } from '@ameliorated-chat/frontend/util-state';
 import { FacadeService } from '../facade.service';
 import { map, Observable } from 'rxjs';
 import {
+  getCurrentId,
   SidebarContentSmartComponent,
   SidebarFooterContentUiComponent
 } from '@ameliorated-chat/chat/feat-chat';
 import { Chat } from '@ameliorated-chat/chat/type-chat';
-import { getCurrentId } from '../../../../feat-chat/src/lib/utils/current-id.util';
+import { SettingsIconUiComponent } from '@ameliorated-chat/frontend/ui-icons';
 
 type PageViewModel = {
   sidebarOpen: boolean;
   currentChatTitle: string;
+  temperatureOfCurrentChat: number;
+  modelOfCurrentChat: string;
+  messagesCountOfCurrentChat: number;
+  showSettingsDropdown: boolean;
 };
 
 type State = {
@@ -25,6 +30,7 @@ type State = {
   currentChat: Chat | null;
   currentChatId: string | null;
   chats: Chat[];
+  showSettingsDropdown: boolean;
 };
 
 @Component({
@@ -36,7 +42,8 @@ type State = {
     RouterOutlet,
     SidebarUiComponent,
     SidebarContentSmartComponent,
-    SidebarFooterContentUiComponent
+    SidebarFooterContentUiComponent,
+    SettingsIconUiComponent
   ],
   templateUrl: './chat-feat-shell.component.html',
   styleUrls: ['./chat-feat-shell.component.scss']
@@ -51,11 +58,18 @@ export class ChatFeatShellComponent extends ObservableState<State> {
     'sidebarOpen',
     'currentChat',
     'currentChatId',
-    'chats'
+    'chats',
+    'showSettingsDropdown'
   ]).pipe(
-    map(({ sidebarOpen, currentChat }) => ({
+    map(({ sidebarOpen, currentChat, showSettingsDropdown }) => ({
       sidebarOpen,
-      currentChatTitle: currentChat ? currentChat?.title : ''
+      currentChatTitle: currentChat ? currentChat?.title : '',
+      temperatureOfCurrentChat: currentChat ? currentChat?.temperature : 0,
+      modelOfCurrentChat: currentChat ? currentChat?.model : '',
+      messagesCountOfCurrentChat: currentChat
+        ? currentChat?.messages.length
+        : 0,
+      showSettingsDropdown
     }))
   );
 
@@ -65,7 +79,8 @@ export class ChatFeatShellComponent extends ObservableState<State> {
       sidebarOpen: true,
       currentChatId: null,
       currentChat: null,
-      chats: []
+      chats: [],
+      showSettingsDropdown: false
     });
 
     const currentChatId$ = getCurrentId(this.router, this.activatedRoute);
@@ -81,10 +96,6 @@ export class ChatFeatShellComponent extends ObservableState<State> {
       currentChatId: currentChatId$,
       currentChat: currentChat$
     });
-  }
-
-  public openSettingsMenu(): void {
-    console.log('open settings menu');
   }
 
   public openHamburgerMenu(): void {
