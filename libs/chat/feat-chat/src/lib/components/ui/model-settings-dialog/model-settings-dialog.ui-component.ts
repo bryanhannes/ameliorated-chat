@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogUiComponent } from '@ameliorated-chat/frontend/ui-design-system';
 import {
-  getDefaultInputState,
   InputState,
   ObservableState
 } from '@ameliorated-chat/frontend/util-state';
@@ -11,9 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { OpenAiIconUiComponent } from '@ameliorated-chat/frontend/ui-icons';
 import { Chat } from '@ameliorated-chat/chat/type-chat';
 
-type ModelSettingsInputState = {
-  chat: Chat;
-};
+type ModelSettingsInputState = Pick<ModelSettingsDialogUiComponent, 'chat'>;
 
 type State = ModelSettingsInputState & {
   model: string;
@@ -69,7 +66,7 @@ export class ModelSettingsDialogUiComponent extends ObservableState<State> {
         model,
         initialSystemInstruction,
         temperature,
-        disableSystemMessageToBeUpdated: chat.messages.length > 1,
+        disableSystemMessageToBeUpdated: chat ? chat.messages.length > 1 : true,
         systemInstructionChanged:
           initialSystemInstruction !== newSystemInstruction
       })
@@ -81,7 +78,8 @@ export class ModelSettingsDialogUiComponent extends ObservableState<State> {
 
     this.initialize(
       {
-        ...getDefaultInputState(this),
+        chat: null,
+        newSystemInstruction: '',
         model: '',
         initialSystemInstruction: '',
         temperature: 0.5

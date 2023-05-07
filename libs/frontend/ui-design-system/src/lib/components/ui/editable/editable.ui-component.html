@@ -13,7 +13,7 @@
   <ng-template #viewMode>
     <div class="view-mode">
       <div class="view-mode__content" [title]="value">
-        {{ value }}
+        <ng-content></ng-content>
       </div>
       <div class="view-mode__buttons">
         <button class="view-mode__button-start" (click)="startEdit()">✏️</button>

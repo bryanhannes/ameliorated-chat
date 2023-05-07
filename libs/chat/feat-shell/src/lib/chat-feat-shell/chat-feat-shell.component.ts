@@ -63,9 +63,9 @@ export class ChatFeatShellComponent extends ObservableState<State> {
   ]).pipe(
     map(({ sidebarOpen, currentChat, showSettingsDropdown }) => ({
       sidebarOpen,
-      currentChatTitle: currentChat ? currentChat?.title : '',
-      temperatureOfCurrentChat: currentChat ? currentChat?.temperature : 0,
-      modelOfCurrentChat: currentChat ? currentChat?.model : '',
+      currentChatTitle: currentChat ? currentChat?.title : 'New Chat',
+      temperatureOfCurrentChat: currentChat ? currentChat?.temperature : 0.5,
+      modelOfCurrentChat: currentChat ? currentChat?.model : 'GPT-3.5-Turbo',
       messagesCountOfCurrentChat: currentChat
         ? currentChat?.messages.length
         : 0,

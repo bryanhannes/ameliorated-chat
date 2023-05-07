@@ -7,19 +7,20 @@
   </ng-container>
 
   <ng-template #chatList>
+
     <div class="favorited-chats__wrapper" *ngIf="vm.favoritedChats.length > 0">
       <div class="favorited-chats__title">
         Favorite chats
       </div>
       <div
-        class="chats__item"
-        *ngFor="let chat of vm.favoritedChats; trackBy: tracker"
+        class="item"
+        *ngFor="let chat of vm.favoritedChats; trackBy: chatTracker"
         [ngClass]="{'chats__item--active': chat.id === currentChatId}"
       >
         <button (click)="onToggleChatAsFavorite(chat.id)" class="button-mark-as-favorite"
                 [class.favorite]="chat.favorited">️{{ chat.favorited ? '★' : '☆' }}</button>
 
-        <span class="chat-title"
+        <span class="title"
               acEditable
               [value]="chat.title"
               (edited)="onChatTitleEdited($event, chat.id)"
@@ -27,16 +28,31 @@
               (clicked)="onChatClicked(chat.id)">{{chat.title}}</span>
       </div>
     </div>
+
     <div
-      class="chats__item"
-      *ngFor="let chat of vm.allChats; trackBy: tracker"
+      class="item"
+      *ngFor="let folder of vm.folders; trackBy: folderTracker"
+    >
+      <button (click)="onToggleFolder(folder.id)" class="button-mark-as-favorite"
+              [class.open]="folder.open">️{{ folder.open ? '>' : 'V' }}</button>
+
+      <span class="title"
+            acEditable
+            [value]="folder.title"
+            (edited)="onFolderTitleEdited($event, folder.id)"
+            (deleted)="onFolderDelete(folder.id)">{{folder.title}} ({{folder.chatCount}} chats) </span>
+    </div>
+ 
+    <div
+      class="item"
+      *ngFor="let chat of vm.allChats; trackBy: chatTracker"
       [ngClass]="{'chats__item--active': chat.id === currentChatId}"
 
     >
       <button (click)="onToggleChatAsFavorite(chat.id)" class="button-mark-as-favorite"
               [class.favorite]="chat.favorited">️{{ chat.favorited ? '★' : '☆' }}</button>
 
-      <span class="chat-title"
+      <span class="title"
             acEditable
             [value]="chat.title"
             (edited)="onChatTitleEdited($event, chat.id)"

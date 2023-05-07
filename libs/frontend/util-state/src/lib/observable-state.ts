@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   BehaviorSubject,
-  connectable,
   distinctUntilChanged,
   filter,
   map,
@@ -9,7 +8,6 @@ import {
   observeOn,
   pipe,
   queueScheduler,
-  ReplaySubject,
   Subject,
   takeUntil,
   UnaryFunction
@@ -24,34 +22,37 @@ const filterAndMapToT: <T>() => UnaryFunction<
     map((v) => v as T)
   );
 
+class StateSubject<T> extends BehaviorSubject<T> {
+  public readonly syncState = this.asObservable().pipe(
+    observeOn(queueScheduler)
+  );
+}
+
 @Injectable()
 export class ObservableState<T extends Record<string, unknown>>
   implements OnDestroy
 {
   private readonly notInitializedError =
-    'State not initialized yet, call the initialize() method';
-  protected readonly destroy$$ = new Subject<void>();
-  private readonly state$$ = new BehaviorSubject<T | null>(null);
+    'State is not initialized yet, call the initialize() method';
+  private readonly destroy$$ = new Subject<void>();
+  private readonly state$$ = new StateSubject<T | null>(null);
 
   /**
-   * Return the entire state as an observable
+   * exposes the state as an observable. This observable is made hot in the initialize() function
+   * Therefor we use a connectable that uses a ReplaySubject as its connector.
    */
-  public readonly state$ = connectable(
-    this.state$$.pipe(
-      filterAndMapToT<T>(),
-      distinctUntilChanged((previous: T, current: T) =>
-        Object.keys(current).every(
-          (key: string) => current[key as keyof T] === previous[key as keyof T]
-        )
-      ),
-      takeUntil(this.destroy$$)
+  public readonly state$ = this.state$$.syncState.pipe(
+    filterAndMapToT<T>(),
+    distinctUntilChanged((previous: T, current: T) =>
+      Object.keys(current).every(
+        (key: string) => current[key as keyof T] === previous[key as keyof T]
+      )
     ),
-    { connector: () => new ReplaySubject(1) }
+    takeUntil(this.destroy$$)
   );
 
   /**
-   * Get a snapshot of the current state. This method is needed when we want to fetch the
-   * state in functions. We don't have to use withLatestFrom if we want to keep it simple.
+   * Returns the current snapshot of the state
    */
   public get snapshot(): T {
     if (!this.state$$.value) {
@@ -61,31 +62,33 @@ export class ObservableState<T extends Record<string, unknown>>
   }
 
   /**
-   * Observable state doesn't work without initializing it first. Our state always needs
-   * an initial state. You can pass the @InputState() as an optional parameter.
-   * Passing that @InputState() will automatically feed the state with the correct values
-   * @param state
-   * @param inputState$
+   * Initializes the state and connects the optional inputState if needed.
+   * When one of the inputs changes the store will get updated in a queued way.
+   * That's why we need the queueScheduler. To ensure that the order is still correct.
+   * The subscriptions made in this method will be auto cleaned up as well.
+   * @param state: The initial state to store
+   * @param inputState$: An observable that emits when the inputs change over time
    */
   public initialize(state: T, inputState$?: Observable<Partial<T>>): void {
-    this.state$.connect();
     this.state$$.next(state);
     if (inputState$) {
       inputState$
-        .pipe(observeOn(queueScheduler), takeUntil(this.destroy$$))
+        .pipe(takeUntil(this.destroy$$))
         .subscribe((res: Partial<T>) => this.patch(res));
     }
   }
 
   /**
-   * This method is used to connect multiple observables to a partial of the state
-   * pass in an object with keys that belong to the state with their observable
+   * Connects different observables to the store.
+   * When these observables emit the store will get updated in a queued way.
+   * That's why we need the queueScheduler. To ensure that the order is still correct.
+   * The subscriptions made in this method will be auto cleaned up as well
    * @param object
    */
   public connect(object: Partial<{ [P in keyof T]: Observable<T[P]> }>): void {
-    Object.keys(object).forEach((key: keyof Partial<T>) => {
-      object[key]
-        ?.pipe(observeOn(queueScheduler), takeUntil(this.destroy$$))
+    Object.keys(object).forEach((key: string) => {
+      object[key as keyof T]
+        ?.pipe(takeUntil(this.destroy$$))
         .subscribe((v: Partial<T>[keyof Partial<T>]) => {
           this.patch({ [key]: v } as Partial<T>);
         });
@@ -93,38 +96,36 @@ export class ObservableState<T extends Record<string, unknown>>
   }
 
   /**
-   * Returns the entire state when one of the properties matching the passed keys changes
-   * @param keys
+   * Returns the state when one of state properties matching the passed keys change.
+   * The subscriptions made in this method will be auto cleaned up as well.
+   * When this observable emits, the subscriber will get notified in a queued way.
+   * That's why we need the queueScheduler. To ensure that the order is still correct.
+   * @param keys: Keys where we want to get notified from when they change
    */
-  public onlySelectWhen(
-    keys: (keyof T)[]
-  ): Observable<{ [P in keyof T]: T[P] }> {
-    const obs$ = connectable(
-      this.state$$.pipe(
-        filterAndMapToT<T>(),
-        distinctUntilChanged((previous: T, current: T) =>
-          keys.every(
-            (key: keyof T) =>
-              current[key as keyof T] === previous[key as keyof T]
-          )
-        ),
-        takeUntil(this.destroy$$)
+  public onlySelectWhen(keys: (keyof T)[]): Observable<T> {
+    return this.state$$.syncState.pipe(
+      map((v) => {
+        return this.state$$.value;
+      }),
+      filterAndMapToT<T>(),
+      distinctUntilChanged((previous: T, current: T) =>
+        keys.every(
+          (key: keyof T) => current[key as keyof T] === previous[key as keyof T]
+        )
       ),
-      { connector: () => new ReplaySubject(1) }
+      takeUntil(this.destroy$$)
     );
-    obs$.connect();
-    return obs$;
   }
 
   /**
-   * Patch a partial of the state. It will loop over all the properties of the passed
-   * object and only next the state once.
-   * @param object
+   * Patches part of the state in one emisson
+   * @param object: partial of the state
    */
-  public patch(object: Partial<T>): void {
+  protected patch(object: Partial<T>): void {
     if (!this.state$$.value) {
       throw new Error(this.notInitializedError);
     }
+
     let newState: T = { ...this.state$$.value };
     Object.keys(object).forEach((key: string) => {
       newState = { ...newState, [key]: object[key as keyof T] };
@@ -133,10 +134,19 @@ export class ObservableState<T extends Record<string, unknown>>
   }
 
   /**
-   * Pick pieces of the state and create an object that has Observables for every key that is passed
+   * Returns an object with only the properties passed in the keys params.
+   * The object contains observables instead of regular objects.
+   * This function is used inside the connect() method to pick
+   * pieces of state from E.G other observable states
+   * ```typescript
+   * connect({
+   *   ...this.userState.pick(['address', 'auth']),
+   *   ...this.applicationState.pick(['applications', 'currentApplication'])
+   * })
+   * ```
    * @param keys
    */
-  public pick<P>(
+  public pick(
     keys: (keyof T)[]
   ): Partial<{ [P in keyof T]: Observable<T[P]> }> {
     const returnObj: Partial<{ [P in keyof T]: Observable<T[P]> }> = {};
@@ -148,6 +158,17 @@ export class ObservableState<T extends Record<string, unknown>>
     return returnObj;
   }
 
+  /**
+   * Used to select a piece of state and expose it as an observable
+   * @param key: The key of the piece of state we want to select
+   */
+  public select<P extends keyof T>(key: P): Observable<T[P]> {
+    return this.onlySelectWhen([key]).pipe(map((state) => state[key]));
+  }
+
+  /**
+   * Cleans up the entire instance
+   */
   public ngOnDestroy(): void {
     this.destroy$$.next();
   }

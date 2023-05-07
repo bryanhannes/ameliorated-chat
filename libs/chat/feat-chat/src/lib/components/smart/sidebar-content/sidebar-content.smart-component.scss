@@ -10,6 +10,10 @@
   gap: $spacing-xsmall;
 
   &__search {
+    display: flex;
+    flex-direction: row;
+    gap: $spacing-xsmall;
+
     &__input {
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
@@ -24,6 +28,18 @@
   padding: $spacing-xsmall;
   border-radius: 4px;
   transition: 0.3s ease-in-out;
+
+  &:hover {
+    background: $gray-400;
+  }
+}
+
+.button__new-folder {
+  background: $gray-300;
+  padding: $spacing-xsmall;
+  border-radius: 4px;
+  transition: 0.3s ease-in-out;
+  font-size: 1.2rem;
 
   &:hover {
     background: $gray-400;

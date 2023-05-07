@@ -8,7 +8,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  getDefaultInputState,
   InputState,
   ObservableState
 } from '@ameliorated-chat/frontend/util-state';
@@ -64,8 +63,9 @@ export class ChatboxUiComponent extends ObservableState<State> {
     super();
     this.initialize(
       {
-        ...getDefaultInputState(this),
-        message: ''
+        message: '',
+        sendOnEnter: false,
+        sidebarOpen: false
       },
       this.inputState$
     );

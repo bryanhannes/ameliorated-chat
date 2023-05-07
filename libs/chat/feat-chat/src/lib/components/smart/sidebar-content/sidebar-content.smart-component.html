@@ -4,10 +4,13 @@
     <div class="toolbox__search">
       <input type="text" placeholder="Search chats" class="toolbox__search__input" [ngModel]="vm.searchText"
              (ngModelChange)="searchTextChanged($event)">
+      <button (click)="newFolder()" class="button__new-folder">📁</button>
     </div>
   </div>
 
-  <ac-chat-list [chats]="vm.filteredChats" [currentChatId]="vm.currentChatId"
+  <ac-chat-list [chats]="vm.filteredChats"
+                [folders]="vm.folders"
+                [currentChatId]="vm.currentChatId"
                 (chatTitleEdited)="chatTitleEdited($event)"
                 (chatDeleted)="chatDeleted($event)"
                 (chatClicked)="chatClicked($event)"

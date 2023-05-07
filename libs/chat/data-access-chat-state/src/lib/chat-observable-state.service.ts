@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat, Message, Role } from '@ameliorated-chat/chat/type-chat';
+import { Chat, Folder, Message, Role } from '@ameliorated-chat/chat/type-chat';
 import {
   getFromLocalStorage,
   patchLocalStorage
 } from '@ameliorated-chat/frontend/util-local-storage';
+import { generateUUID } from '@ameliorated-chat/frontend/util-uuid';
 
 export type ChatState = {
   sidebarOpen: boolean;
   openAIApiKey: string;
   chats: Chat[];
+  folders: Folder[];
   sendOnEnter: boolean;
   userProfilePicUrl: string;
   inputApiKeyDialogVisible: boolean;
@@ -87,7 +89,8 @@ export class ChatObservableState extends ObservableState<ChatState> {
       defaultInitialSystemInstruction: getFromLocalStorage(
         'defaultInitialSystemInstruction',
         'You are ChatGPT, a large language model trained by OpenAI.'
-      )
+      ),
+      folders: getFromLocalStorage('folders', [])
     });
   }
 
@@ -321,5 +324,23 @@ export class ChatObservableState extends ObservableState<ChatState> {
 
     this.patch({ chats: newChats });
     patchLocalStorage('chats', newChats);
+  }
+
+  public newFolder(): void {
+    const newFolders: Folder[] = [
+      ...this.snapshot.folders,
+      {
+        id: generateUUID(),
+        title: 'New folder',
+        new: true,
+        open: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        order: this.snapshot.folders.length
+      }
+    ];
+
+    this.patch({ folders: newFolders });
+    patchLocalStorage('folders', newFolders);
   }
 }

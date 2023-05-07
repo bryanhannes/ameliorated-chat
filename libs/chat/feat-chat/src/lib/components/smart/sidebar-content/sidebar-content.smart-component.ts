@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ObservableState } from '@ameliorated-chat/frontend/util-state';
-import { Chat } from '@ameliorated-chat/chat/type-chat';
+import { Chat, Folder } from '@ameliorated-chat/chat/type-chat';
 import { FacadeService } from '../../../facade.service';
 import { debounceTime, map, Observable, pipe } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -14,10 +14,12 @@ type PageViewModel = {
   currentChatId: string | null;
   filteredChats: Chat[];
   searchText: string;
+  folders: Folder[];
 };
 
 type State = {
   chats: Chat[];
+  folders: Folder[];
   searchText: string;
   filteredChats: Chat[];
   currentChatId: string | null;
@@ -39,12 +41,14 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
   public readonly vm$: Observable<PageViewModel> = this.onlySelectWhen([
     'filteredChats',
     'searchText',
-    'currentChatId'
+    'currentChatId',
+    'folders'
   ]).pipe(
-    map(({ filteredChats, searchText, currentChatId }) => ({
+    map(({ filteredChats, searchText, currentChatId, folders }) => ({
       filteredChats,
       searchText,
-      currentChatId
+      currentChatId,
+      folders
     }))
   );
 
@@ -53,6 +57,7 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
     this.initialize({
       chats: [],
       filteredChats: [],
+      folders: [],
       searchText: '',
       currentChatId: null
     });
@@ -65,7 +70,7 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
     );
 
     this.connect({
-      ...this.chatObservableState.pick(['chats']),
+      ...this.chatObservableState.pick(['chats', 'folders']),
       currentChatId: currentChatId$,
       filteredChats: filteredChats$
     });
@@ -111,6 +116,10 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
     if (window.innerWidth < 768) {
       this.chatObservableState.toggleSidebar();
     }
+  }
+
+  public newFolder(): void {
+    this.chatObservableState.newFolder();
   }
 }
 
