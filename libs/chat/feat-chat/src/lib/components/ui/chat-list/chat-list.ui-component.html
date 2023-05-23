@@ -29,35 +29,73 @@
       </div>
     </div>
 
-    <div
-      class="item"
-      *ngFor="let folder of vm.folders; trackBy: folderTracker"
-    >
-      <button (click)="onToggleFolder(folder.id)" class="button-mark-as-favorite"
-              [class.open]="folder.open">️{{ folder.open ? '>' : 'V' }}</button>
+    <div class="wrapper-list" cdkDropListGroup>
+      <div class="folder-list">
+        <ng-container *ngFor="let folder of vm.folders; trackBy: folderTracker">
+          <div
+            class="item"
+            cdkDropList
+            [cdkDropListData]="folder.id">
+            <button (click)="onToggleFolder(folder.id)" class="button-mark-as-favorite"
+                    [class.open]="folder.open">️{{ folder.open ? 'V' : '>' }}</button>
 
-      <span class="title"
-            acEditable
-            [value]="folder.title"
-            (edited)="onFolderTitleEdited($event, folder.id)"
-            (deleted)="onFolderDelete(folder.id)">{{folder.title}} ({{folder.chatCount}} chats) </span>
-    </div>
- 
-    <div
-      class="item"
-      *ngFor="let chat of vm.allChats; trackBy: chatTracker"
-      [ngClass]="{'chats__item--active': chat.id === currentChatId}"
+            <span class="title"
+                  acEditable
+                  [value]="folder.title"
+                  (edited)="onFolderTitleEdited($event, folder.id)"
+                  (deleted)="onFolderDelete(folder.id)">{{folder.title}}
+              <span class="folder-count">({{folder.chatCount}} chats)</span>
+            </span>
+          </div>
 
-    >
-      <button (click)="onToggleChatAsFavorite(chat.id)" class="button-mark-as-favorite"
-              [class.favorite]="chat.favorited">️{{ chat.favorited ? '★' : '☆' }}</button>
 
-      <span class="title"
-            acEditable
-            [value]="chat.title"
-            (edited)="onChatTitleEdited($event, chat.id)"
-            (deleted)="onChatDelete(chat.id)"
-            (clicked)="onChatClicked(chat.id)">{{chat.title}}</span>
+          <div class="folder-chat-list" [ngClass]="{'open': folder.open}">
+
+            <ng-container *ngFor="let chat of folder.chats; trackBy: folderTracker">
+              <div
+                class="item"
+                cdkDrag
+                cdkDragLockAxis="y"
+                [cdkDragData]="chat.id"
+                (cdkDragDropped)="chatDropped($event)"
+                [ngClass]="{'chats__item--active': chat.id === currentChatId}">
+                <button (click)="onToggleChatAsFavorite(chat.id)" class="button-mark-as-favorite"
+                        [class.favorite]="chat.favorited">️{{ chat.favorited ? '★' : '☆' }}</button>
+
+                <span class="title"
+                      acEditable
+                      [value]="chat.title"
+                      (edited)="onChatTitleEdited($event, chat.id)"
+                      (deleted)="onChatDelete(chat.id)"
+                      (clicked)="onChatClicked(chat.id)">{{chat.title}}</span>
+              </div>
+            </ng-container>
+          </div>
+
+        </ng-container>
+      </div>
+
+      <div class="chats-list" cdkDropList>
+        <ng-container *ngFor="let chat of vm.allChatsWithoutFolder; trackBy: chatTracker">
+          <div
+            class="item"
+            cdkDrag
+            cdkDragLockAxis="y"
+            [cdkDragData]="chat.id"
+            (cdkDragDropped)="chatDropped($event)"
+            [ngClass]="{'chats__item--active': chat.id === currentChatId}">
+            <button (click)="onToggleChatAsFavorite(chat.id)" class="button-mark-as-favorite"
+                    [class.favorite]="chat.favorited">️{{ chat.favorited ? '★' : '☆' }}</button>
+
+            <span class="title"
+                  acEditable
+                  [value]="chat.title"
+                  (edited)="onChatTitleEdited($event, chat.id)"
+                  (deleted)="onChatDelete(chat.id)"
+                  (clicked)="onChatClicked(chat.id)">{{chat.title}}</span>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </ng-template>
 </ng-container>

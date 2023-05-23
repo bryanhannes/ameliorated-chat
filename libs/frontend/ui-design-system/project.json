@@ -3,17 +3,12 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/frontend/ui-design-system/src",
   "prefix": "ac",
-  "tags": [
-    "scope:frontend",
-    "type:ui"
-  ],
+  "tags": ["scope:frontend", "type:ui"],
   "projectType": "library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "libs/frontend/ui-design-system/jest.config.ts",
         "passWithNoTests": true
@@ -26,10 +21,8 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
           "libs/frontend/ui-design-system/**/*.ts",

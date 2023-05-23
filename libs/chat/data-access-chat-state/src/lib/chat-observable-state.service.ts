@@ -385,4 +385,19 @@ export class ChatObservableState extends ObservableState<ChatState> {
     this.patch({ folders: newFolders });
     patchLocalStorage('folders', newFolders);
   }
+
+  public addChatToFolder(chatId: string, folderId: string): void {
+    const newChats = this.snapshot.chats.map((chat) => {
+      if (chat.id === chatId) {
+        return {
+          ...chat,
+          folderId
+        };
+      }
+      return chat;
+    });
+
+    this.patch({ chats: newChats });
+    patchLocalStorage('chats', newChats);
+  }
 }

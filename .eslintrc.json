@@ -1,36 +1,23 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
-  "plugins": [
-    "@nrwl/nx"
-  ],
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nx"],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@nrwl/nx/enforce-module-boundaries": [
+        "@nx/enforce-module-boundaries": [
           "error",
           {
             "allow": [],
             "depConstraints": [
               {
                 "sourceTag": "type:app",
-                "onlyDependOnLibsWithTags": [
-                  "*"
-                ]
+                "onlyDependOnLibsWithTags": ["*"]
               },
               {
                 "sourceTag": "type:type",
-                "onlyDependOnLibsWithTags": [
-                  "type:type"
-                ]
+                "onlyDependOnLibsWithTags": ["type:type"]
               },
               {
                 "sourceTag": "type:ui",
@@ -42,10 +29,7 @@
               },
               {
                 "sourceTag": "type:util",
-                "onlyDependOnLibsWithTags": [
-                  "type:util",
-                  "type:type"
-                ]
+                "onlyDependOnLibsWithTags": ["type:util", "type:type"]
               },
               {
                 "sourceTag": "type:feat",
@@ -75,43 +59,25 @@
               },
               {
                 "sourceTag": "scope:frontend",
-                "onlyDependOnLibsWithTags": [
-                  "scope:frontend",
-                  "scope:shared"
-                ]
-              },
+                "onlyDependOnLibsWithTags": ["scope:frontend", "scope:shared"]
+              }
             ]
           }
         ]
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/typescript"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/javascript"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.spec.ts",
-        "*.spec.tsx",
-        "*.spec.js",
-        "*.spec.jsx"
-      ],
+      "files": ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
       "env": {
         "jest": true
       },

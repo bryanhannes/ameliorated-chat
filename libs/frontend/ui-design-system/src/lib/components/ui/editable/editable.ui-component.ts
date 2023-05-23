@@ -89,13 +89,11 @@ export class EditableUiComponent extends ObservableState<State> {
   public onClick(event: MouseEvent): void {
     event.stopPropagation();
     const target = event.target as HTMLElement;
-    console.log(target);
     if (
       !target.className.includes('view-mode__button-') &&
       !target.className.includes('edit-mode__button-') &&
       !this.snapshot.isEditing
     ) {
-      console.log('emit click');
       this.clicked.emit();
     }
   }

@@ -66,3 +66,18 @@
     font-size: 0.8rem;
   }
 }
+
+.folder-count {
+  color: $gray-600;
+}
+
+.folder-chat-list {
+  margin-left: $spacing-medium;
+  border-left: 2px solid $gray-400;
+  display: none;
+
+  &.open {
+    display: flex;
+    flex-direction: column;
+  }
+}

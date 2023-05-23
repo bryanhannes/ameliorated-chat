@@ -139,6 +139,10 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
   public folderToggled(id: string): void {
     this.chatObservableState.toggleFolder(id);
   }
+
+  addChatToFolder({ chatId, folderId }: { chatId: string; folderId: string }) {
+    this.chatObservableState.addChatToFolder(chatId, folderId);
+  }
 }
 
 const mapToFilteredChats = () =>

@@ -13,15 +13,16 @@ import { FormsModule } from '@angular/forms';
 import { EditableUiComponent } from '@ameliorated-chat/frontend/ui-design-system';
 import { InputState } from '@ameliorated-chat/frontend/util-state';
 import { map, Observable } from 'rxjs';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 
-type FolderWithChatCount = Folder & { chatCount: number };
+type FolderWithChats = Folder & { chatCount: number; chats: Chat[] };
 
 type ViewModel = {
   favoritedChats: Chat[];
-  allChats: Chat[];
+  allChatsWithoutFolder: Chat[];
   currentChatId: string | null;
   showEmptyState: boolean;
-  folders: FolderWithChatCount[];
+  folders: FolderWithChats[];
 };
 
 type ChatListInputState = {
@@ -33,7 +34,13 @@ type ChatListInputState = {
 @Component({
   selector: 'ac-chat-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, EditableUiComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    FormsModule,
+    EditableUiComponent,
+    DragDropModule
+  ],
   templateUrl: './chat-list.ui-component.html',
   styleUrls: ['./chat-list.ui-component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -55,10 +62,14 @@ export class ChatListUiComponent {
   @Output() public readonly chatDeleted = new EventEmitter<string>();
   @Output() public readonly folderDeleted = new EventEmitter<string>();
   @Output() public readonly folderToggled = new EventEmitter<string>();
+  @Output() public readonly addChatToFolder = new EventEmitter<{
+    chatId: string;
+    folderId: string;
+  }>();
   @Output() public readonly toggleChatAsFavorite = new EventEmitter<string>();
   @Output() public readonly chatClicked = new EventEmitter<string>();
   public readonly chatTracker: TrackByFunction<Chat> = (index, item) => item.id;
-  public readonly folderTracker: TrackByFunction<FolderWithChatCount> = (
+  public readonly folderTracker: TrackByFunction<FolderWithChats> = (
     index,
     item
   ) => item.id;
@@ -66,16 +77,20 @@ export class ChatListUiComponent {
   public readonly vm$: Observable<ViewModel> = this.inputState$.pipe(
     map(({ chats, currentChatId, folders }) => {
       const favoritedChats: Chat[] = chats.filter((chat) => chat.favorited);
-      const foldersWithChatCount: FolderWithChatCount[] = folders.map(
+      const foldersWithChatCount: FolderWithChats[] = folders.map(
         (folder: Folder) => ({
           ...folder,
-          chatCount: chats.filter((chat) => chat.folderId === folder.id).length
+          chatCount: chats.filter((chat) => chat.folderId === folder.id).length,
+          chats: chats.filter((chat) => chat.folderId === folder.id)
         })
+      );
+      const allChatsWithoutFolder: Chat[] = chats.filter(
+        (chat) => !chat.folderId
       );
 
       return {
         favoritedChats,
-        allChats: chats,
+        allChatsWithoutFolder,
         currentChatId,
         showEmptyState: chats.length === 0,
         folders: foldersWithChatCount
@@ -109,5 +124,11 @@ export class ChatListUiComponent {
 
   public onToggleFolder(id: string): void {
     this.folderToggled.emit(id);
+  }
+
+  public chatDropped($event: CdkDragDrop<unknown, unknown>): void {
+    const chatId = $event.item.data;
+    const folderId = $event.container.data as string;
+    this.addChatToFolder.emit({ chatId, folderId });
   }
 }
