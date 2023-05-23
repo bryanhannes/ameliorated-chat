@@ -343,4 +343,46 @@ export class ChatObservableState extends ObservableState<ChatState> {
     this.patch({ folders: newFolders });
     patchLocalStorage('folders', newFolders);
   }
+
+  public updateFolderTitle(newTitle: string, id: string): void {
+    const newFolders: Folder[] = this.snapshot.folders.map((folder) => {
+      if (folder.id === id) {
+        return {
+          ...folder,
+          title: newTitle,
+          new: false,
+          updatedAt: new Date()
+        };
+      }
+      return folder;
+    });
+
+    this.patch({
+      folders: newFolders
+    });
+    patchLocalStorage('folders', newFolders);
+  }
+
+  public deleteFolder(id: string): void {
+    const newFolders: Folder[] = this.snapshot.folders.filter(
+      (folder) => folder.id !== id
+    );
+    this.patch({ folders: newFolders });
+    patchLocalStorage('folders', newFolders);
+  }
+
+  public toggleFolder(id: string): void {
+    const newFolders: Folder[] = this.snapshot.folders.map((folder) => {
+      if (folder.id === id) {
+        return {
+          ...folder,
+          open: !folder.open
+        };
+      }
+      return folder;
+    });
+
+    this.patch({ folders: newFolders });
+    patchLocalStorage('folders', newFolders);
+  }
 }

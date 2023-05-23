@@ -121,6 +121,24 @@ export class SidebarContentSmartComponent extends ObservableState<State> {
   public newFolder(): void {
     this.chatObservableState.newFolder();
   }
+
+  public folderTitleEdited({
+    newTitle,
+    id
+  }: {
+    newTitle: string;
+    id: string;
+  }): void {
+    this.chatObservableState.updateFolderTitle(newTitle, id);
+  }
+
+  public folderDeleted(id: string): void {
+    this.chatObservableState.deleteFolder(id);
+  }
+
+  public folderToggled(id: string): void {
+    this.chatObservableState.toggleFolder(id);
+  }
 }
 
 const mapToFilteredChats = () =>

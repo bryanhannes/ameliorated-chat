@@ -54,6 +54,7 @@ export class ChatListUiComponent {
   }>();
   @Output() public readonly chatDeleted = new EventEmitter<string>();
   @Output() public readonly folderDeleted = new EventEmitter<string>();
+  @Output() public readonly folderToggled = new EventEmitter<string>();
   @Output() public readonly toggleChatAsFavorite = new EventEmitter<string>();
   @Output() public readonly chatClicked = new EventEmitter<string>();
   public readonly chatTracker: TrackByFunction<Chat> = (index, item) => item.id;
@@ -106,5 +107,7 @@ export class ChatListUiComponent {
     this.folderDeleted.emit(id);
   }
 
-  public onToggleFolder(id: string): void {}
+  public onToggleFolder(id: string): void {
+    this.folderToggled.emit(id);
+  }
 }
